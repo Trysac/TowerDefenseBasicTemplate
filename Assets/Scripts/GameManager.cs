@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    // Propertis
+    // Properties
     public EnemyPath EnemyPath { get => enemyPath; set => enemyPath = value; }
     public UnityEvent OnEnemyDestroyedEvent { get => onEnemyDestroyedEvent; set => onEnemyDestroyedEvent = value; }
     public UnityEvent OnMoneyChangedEvent { get => onMoneyChangedEvent; set => onMoneyChangedEvent = value; }
