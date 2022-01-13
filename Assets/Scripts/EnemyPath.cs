@@ -6,16 +6,20 @@ public class EnemyPath : MonoBehaviour
 {
     [SerializeField] Transform[] waypoints;
 
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        for (int item = 0; item < waypoints.Length; item++)
+        for (int item = 0; item < Waypoints.Length; item++)
         {
-            Gizmos.DrawWireSphere(waypoints[item].position, 0.25f);
-            if (item < waypoints.Length - 1)
+            Gizmos.DrawWireSphere(Waypoints[item].position, 0.25f);
+            if (item < Waypoints.Length - 1)
             {
-                Gizmos.DrawLine(waypoints[item].position, waypoints[item + 1].position);
+                Gizmos.DrawLine(Waypoints[item].position, Waypoints[item + 1].position);
             }
         }
     }
+
+    // Properties
+    public Transform[] Waypoints { get => waypoints; set => waypoints = value; }
 }

@@ -15,16 +15,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] EnemyPath enemyPath;
 
     [Header("Events")]
-    [SerializeField] UnityEvent onEnemyDestroyed;
-    [SerializeField] UnityEvent onMoneyChanged;
+    [SerializeField] UnityEvent onEnemyDestroyedEvent;
+    [SerializeField] UnityEvent onMoneyChangedEvent;
 
     //Singleton
     public static GameManager instance;
+
+    //Private
     private void Awake()
     {
         if (instance) { Destroy(this.gameObject); }
         else { instance = this; }
     }
+
+    private void OnEnemyDestroyed()
+    {
+
+    }
+
+    //Public
+
     public void UpdateHealthAndMoneyText()
     {
         playerHealthAndMoneyText.text = $"Health: {playerHealth}\nMoney: ${playerMoney}";
@@ -35,14 +45,14 @@ public class GameManager : MonoBehaviour
     {
         playerMoney += amount;
         UpdateHealthAndMoneyText();
-        onMoneyChanged.Invoke();
+        onMoneyChangedEvent.Invoke();
     }
 
     public void TakeMoney(int amount)
     {
         playerMoney += amount;
         UpdateHealthAndMoneyText();
-        onMoneyChanged.Invoke();
+        onMoneyChangedEvent.Invoke();
     }
 
     public void TakeDamage(int amount)
@@ -62,8 +72,8 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void OnEnemyDestroyed()
-    {
-
-    }
+    // Propertis
+    public EnemyPath EnemyPath { get => enemyPath; set => enemyPath = value; }
+    public UnityEvent OnEnemyDestroyedEvent { get => onEnemyDestroyedEvent; set => onEnemyDestroyedEvent = value; }
+    public UnityEvent OnMoneyChangedEvent { get => onMoneyChangedEvent; set => onMoneyChangedEvent = value; }
 }
