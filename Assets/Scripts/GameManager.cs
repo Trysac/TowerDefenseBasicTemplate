@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI playerHealthAndMoneyText;
+    [SerializeField] EnemyPath enemyPath;
 
     [Header("Events")]
     [SerializeField] UnityEvent onEnemyDestroyed;
@@ -24,7 +25,8 @@ public class GameManager : MonoBehaviour
         if (instance) { Destroy(this.gameObject); }
         else { instance = this; }
     }
-    public void UpdateHealthAndMoneyText() {
+    public void UpdateHealthAndMoneyText()
+    {
         playerHealthAndMoneyText.text = $"Health: {playerHealth}\nMoney: ${playerMoney}";
         //playerHealthAndMoneyText.text = "Health: " + playerHealth + "\nMoney:" + playerMoney;
     }
