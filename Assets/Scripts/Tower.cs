@@ -72,7 +72,13 @@ public class Tower : MonoBehaviour
 
     private void Attack()
     {
-
+        if (rotateTowardsTarget)
+        {
+            this.transform.LookAt(currentEnemy.transform);
+            this.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        }
+        GameObject projectile = Instantiate(projectilePrefab, projectileSpawnPosition.position, Quaternion.identity);
+        projectile.GetComponent<Projectile>().Initializer(currentEnemy, projectileDamage, projectileSpeed);
     }
 
     private Enemy getClosestEnemy()
