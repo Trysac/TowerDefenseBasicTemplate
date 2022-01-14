@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3bcb1f3d30731a4cbd6f34741cdc79a, type: 3}
   m_Name: Wave_1
   m_EditorClassIdentifier: 
-  enemySets: []
+  enemySets:
+  - enemyPrefab: {fileID: 5218019349678422989, guid: b2bf976e7bde217428ff8b090faeefa5, type: 3}
+    spawnCount: 5
+    spawnDelay: 0
+    spawnRate: 0.3
