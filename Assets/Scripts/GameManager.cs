@@ -28,10 +28,6 @@ public class GameManager : MonoBehaviour
         else { instance = this; }
     }
 
-    private void OnEnemyDestroyed()
-    {
-
-    }
 
     //Public
 
@@ -46,6 +42,11 @@ public class GameManager : MonoBehaviour
         playerMoney += amount;
         UpdateHealthAndMoneyText();
         onMoneyChangedEvent.Invoke();
+    }
+
+    public void OnEnemyDestroyed()
+    {
+
     }
 
     public void TakeMoney(int amount)
