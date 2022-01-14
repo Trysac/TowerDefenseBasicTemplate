@@ -47,7 +47,7 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
-    private void SpawnNextWave() {
+    public void SpawnNextWave() {
         currentWave++;
         if (currentWave - 1 == waves.Length) 
         {
