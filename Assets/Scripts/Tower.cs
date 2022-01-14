@@ -37,12 +37,73 @@ public class Tower : MonoBehaviour
 
     private Enemy getTarget()
     {
-        return null;
+        currentEnemiesInRange.RemoveAll(x => x == null);
+
+        if (currentEnemiesInRange.Count == 0)
+        {
+            return null;
+        }
+
+        if (currentEnemiesInRange.Count == 1)
+        {
+            return currentEnemiesInRange[0];
+        }
+
+        switch (targetPriority)
+        {
+            case Enums.TowerTargetPriority.First:
+                {
+                    return currentEnemiesInRange[0];
+                }
+            case Enums.TowerTargetPriority.Close:
+                {
+                    return getClosestEnemy();
+                }
+            case Enums.TowerTargetPriority.Strong:
+                {
+                    return getStrongestEnemy();
+                }
+            default:
+                {
+                    return null;
+                }
+        }
     }
 
     private void Attack()
     {
 
+    }
+
+    private Enemy getClosestEnemy()
+    {
+        Enemy closest = null;
+        float distanceA = 999999;
+        for (int i = 0; i < currentEnemiesInRange.Count; i++)
+        {
+            //Usefull for seen what object is closest to us
+            float distanceB = (this.transform.position - currentEnemiesInRange[i].transform.position).sqrMagnitude;
+            if (distanceB < distanceA)
+            {
+                closest = currentEnemiesInRange[i];
+                distanceA = distanceB;
+            }
+        }
+        return closest;
+    }
+
+    private Enemy getStrongestEnemy()
+    {
+        Enemy strongest = null;
+        int strongestHealth = 0;
+        foreach (Enemy enemy in currentEnemiesInRange)
+        {
+            if (enemy.Health > strongestHealth)
+            {
+                strongestHealth = enemy.Health;
+            }
+        }
+        return strongest;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -61,4 +122,6 @@ public class Tower : MonoBehaviour
     }
 
     //Public
+
+
 }

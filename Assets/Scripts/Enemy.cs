@@ -45,12 +45,15 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        health -= amount;
-        if (health <= 0)
+        Health -= amount;
+        if (Health <= 0)
         {
             GameManager.instance.AddMoney(moneyOnDeath);
             GameManager.instance.OnEnemyDestroyedEvent.Invoke();
             Destroy(this.gameObject);
         }
     }
+
+    // Properties
+    public int Health { get => health; set => health = value; }
 }
