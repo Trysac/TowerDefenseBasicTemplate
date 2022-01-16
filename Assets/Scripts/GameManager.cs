@@ -33,13 +33,13 @@ public class GameManager : MonoBehaviour
 
     public void UpdateHealthAndMoneyText()
     {
-        playerHealthAndMoneyText.text = $"Health: {playerHealth}\nMoney: ${playerMoney}";
+        playerHealthAndMoneyText.text = $"Health: {playerHealth}\nMoney: ${PlayerMoney}";
         //playerHealthAndMoneyText.text = "Health: " + playerHealth + "\nMoney:" + playerMoney;
     }
 
     public void AddMoney(int amount)
     {
-        playerMoney += amount;
+        PlayerMoney += amount;
         UpdateHealthAndMoneyText();
         onMoneyChangedEvent.Invoke();
     }
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     public void TakeMoney(int amount)
     {
-        playerMoney += amount;
+        PlayerMoney -= amount;
         UpdateHealthAndMoneyText();
         onMoneyChangedEvent.Invoke();
     }
@@ -77,4 +77,5 @@ public class GameManager : MonoBehaviour
     public EnemyPath EnemyPath { get => enemyPath; set => enemyPath = value; }
     public UnityEvent OnEnemyDestroyedEvent { get => onEnemyDestroyedEvent; set => onEnemyDestroyedEvent = value; }
     public UnityEvent OnMoneyChangedEvent { get => onMoneyChangedEvent; set => onMoneyChangedEvent = value; }
+    public int PlayerMoney { get => playerMoney; set => playerMoney = value; }
 }

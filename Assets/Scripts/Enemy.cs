@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform[] enemyPath;
     [SerializeField] int currentWaypoint;
 
+    private bool isAlive = true;
+
     private void Start()
     {
         enemyPath = GameManager.instance.EnemyPath.Waypoints;
@@ -46,8 +48,9 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int amount)
     {
         Health -= amount;
-        if (Health <= 0)
+        if (Health <= 0 && isAlive)
         {
+            isAlive = false;
             GameManager.instance.AddMoney(moneyOnDeath);
             GameManager.instance.OnEnemyDestroyedEvent.Invoke();
             Destroy(this.gameObject);

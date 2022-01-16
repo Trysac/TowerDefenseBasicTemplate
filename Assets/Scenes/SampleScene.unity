@@ -4807,6 +4807,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b9c44a9fc48d342a412ddac1b82cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tower: {fileID: 11400000, guid: 7632871ec05cc384c9079292b9a18b76, type: 2}
+  towerCostText: {fileID: 1330988309}
+  towerIcon: {fileID: 1386967270}
 --- !u!114 &1386967269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7019,6 +7022,7 @@ GameObject:
   - component: {fileID: 2038334818}
   - component: {fileID: 2038334820}
   - component: {fileID: 2038334819}
+  - component: {fileID: 2038334821}
   m_Layer: 5
   m_Name: TowerBuyButton (1)
   m_TagString: Untagged
@@ -7084,6 +7088,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2038334817}
   m_CullTransparentMesh: 1
+--- !u!114 &2038334821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038334817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3b9c44a9fc48d342a412ddac1b82cd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower: {fileID: 11400000, guid: 7632871ec05cc384c9079292b9a18b76, type: 2}
+  towerCostText: {fileID: 704044219}
+  towerIcon: {fileID: 2038334819}
 --- !u!1 &2073804840
 GameObject:
   m_ObjectHideFlags: 0
