@@ -22,12 +22,25 @@ public class TowerPlacement : MonoBehaviour
 
     private void Update()
     {
+        if (placingTower)
+        {
+            Ray ray = gameCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            RaycastHit hit;
 
+            if (Physics.Raycast(ray, out hit, int.MaxValue, tileLayerMask))
+            {
+                currentSelectedTile = hit.collider.GetComponent<TowerTile>();
+                previewTower.transform.position = currentSelectedTile.transform.position + new Vector3(0, towerPlaceOffSet, 0);
+            }
+        }
     }
 
     public void SelectTowerToPlace(TowerData tower)
     {
-
+        towerToPlaceDown = tower;
+        placingTower = true;
+        previewTower.gameObject.SetActive(true);
+        previewTower.SetTower(tower);
     }
 
     public void PlaceTower()

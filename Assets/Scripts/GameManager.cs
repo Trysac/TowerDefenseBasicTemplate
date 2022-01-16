@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("Components")]
     [SerializeField] TextMeshProUGUI playerHealthAndMoneyText;
     [SerializeField] EnemyPath enemyPath;
+    [SerializeField] TowerPlacement towerPlacement;
 
     [Header("Events")]
     [SerializeField] UnityEvent onEnemyDestroyedEvent;
@@ -78,4 +79,5 @@ public class GameManager : MonoBehaviour
     public UnityEvent OnEnemyDestroyedEvent { get => onEnemyDestroyedEvent; set => onEnemyDestroyedEvent = value; }
     public UnityEvent OnMoneyChangedEvent { get => onMoneyChangedEvent; set => onMoneyChangedEvent = value; }
     public int PlayerMoney { get => playerMoney; set => playerMoney = value; }
+    public TowerPlacement TowerPlacement { get => towerPlacement; set => towerPlacement = value; }
 }

@@ -2977,6 +2977,7 @@ MonoBehaviour:
   playerMoney: 500
   playerHealthAndMoneyText: {fileID: 1813906678}
   enemyPath: {fileID: 1644058060}
+  towerPlacement: {fileID: 629426371}
   onEnemyDestroyedEvent:
     m_PersistentCalls:
       m_Calls:
@@ -3053,6 +3054,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ef3ec1a31869f47bc9725d50e7d1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  towerPlaceOffSet: 0.1
+  previewTower: {fileID: 6610665489625547137}
+  towerToPlaceDown: {fileID: 0}
+  placingTower: 0
+  currentSelectedTile: {fileID: 0}
+  gameCamera: {fileID: 0}
 --- !u!1001 &639695924
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3264,16 +3274,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 668494434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_PointAction: {fileID: 1054132383583890850, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MoveAction: {fileID: 3710738434707379630, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_SubmitAction: {fileID: 2064916234097673511, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_CancelAction: {fileID: -1967631576421560919, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_LeftClickAction: {fileID: 8056856818456041789, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MiddleClickAction: {fileID: 3279352641294131588, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_RightClickAction: {fileID: 3837173908680883260, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDevicePositionAction: {fileID: 4754684134866288074, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
 --- !u!114 &668494436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5796,7 +5814,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1386967270}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1386967268}
+        m_TargetAssemblyTypeName: TowerButtonUI, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1386967270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7430,6 +7460,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.0000001, y: 0.19999999, z: 1.0000001}
   m_Center: {x: 0.0000011920929, y: 0.099999994, z: 0.00000166893}
+--- !u!4 &1706209024 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6610665487974149760, guid: 7bf08e3c9dfd5cd4cb96ecbc040c8db3, type: 3}
+  m_PrefabInstance: {fileID: 6610665489625547136}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1718020440
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9095,5 +9130,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7655668258776262441, guid: 7bf08e3c9dfd5cd4cb96ecbc040c8db3, type: 3}
+      propertyPath: towerRange
+      value: 
+      objectReference: {fileID: 1706209024}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bf08e3c9dfd5cd4cb96ecbc040c8db3, type: 3}
+--- !u!114 &6610665489625547137 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7655668258776262441, guid: 7bf08e3c9dfd5cd4cb96ecbc040c8db3, type: 3}
+  m_PrefabInstance: {fileID: 6610665489625547136}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c8a928e16155b498ca6a64cd7f8c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
