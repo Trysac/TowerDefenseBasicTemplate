@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class PreviewTower : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Transform towerRange;
+
+    public void SetTower(TowerData tower)
     {
-        
+        towerRange.localScale = new Vector3(tower.Range * 2, 0.1f, tower.Range * 2);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
