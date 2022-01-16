@@ -4,40 +4,40 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] Enemy target;
-    [SerializeField] int damage;
-    [SerializeField] float moveSpeed;
+    private Enemy target;
+    private int damage;
+    private float moveSpeed;
 
     public GameObject hitSpawnPrefab;
 
-    public void Initializer(Enemy target, int damage, float moveSpeed)
+    public void Initialize (Enemy target, int damage, float moveSpeed)
     {
         this.target = target;
         this.damage = damage;
         this.moveSpeed = moveSpeed;
     }
 
-    private void Update()
+    void Update ()
     {
-        if (target != null)
+        if(target != null)
         {
-            this.transform.position = Vector3.MoveTowards(this.transform.position, target.transform.position, moveSpeed * Time.deltaTime);
-            this.transform.LookAt(target.transform);
-            if (Vector3.Distance(this.transform.position, target.transform.position) < 0.2f)
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, moveSpeed * Time.deltaTime);
+
+            transform.LookAt(target.transform);
+
+            if(Vector3.Distance(transform.position, target.transform.position) < 0.2f)
             {
                 target.TakeDamage(damage);
-                if (hitSpawnPrefab != null)
-                {
-                    Instantiate(hitSpawnPrefab, this.transform.position, Quaternion.identity);
-                }
 
-                Destroy(this.gameObject);
+                if(hitSpawnPrefab != null)
+                    Instantiate(hitSpawnPrefab, transform.position, Quaternion.identity);
+
+                Destroy(gameObject);
             }
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
-
 }

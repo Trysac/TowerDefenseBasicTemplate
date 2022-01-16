@@ -6,78 +6,96 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("General Parameters")]
-    [SerializeField] int playerHealth;
-    [SerializeField] int playerMoney;
+    public int health;
+    public int money;
+    private bool gameActive;
 
     [Header("Components")]
-    [SerializeField] TextMeshProUGUI playerHealthAndMoneyText;
-    [SerializeField] EnemyPath enemyPath;
-    [SerializeField] TowerPlacement towerPlacement;
+    public TextMeshProUGUI healthAndMoneyText;
+    public EnemyPath enemyPath;
+    public TowerPlacement towerPlacement;
+    public EndScreenUI endScreen;
+    public WaveSpawner waveSpawner;
 
     [Header("Events")]
-    [SerializeField] UnityEvent onEnemyDestroyedEvent;
-    [SerializeField] UnityEvent onMoneyChangedEvent;
+    public UnityEvent onMoneyChanged;
 
-    //Singleton
+    // Singleton
     public static GameManager instance;
 
-    //Private
-    private void Awake()
+    void OnEnable ()
     {
-        if (instance) { Destroy(this.gameObject); }
-        else { instance = this; }
+        Enemy.OnDestroyed += OnEnemyDestroyed;
     }
 
-
-    //Public
-
-    public void UpdateHealthAndMoneyText()
+    void OnDisable ()
     {
-        playerHealthAndMoneyText.text = $"Health: {playerHealth}\nMoney: ${PlayerMoney}";
-        //playerHealthAndMoneyText.text = "Health: " + playerHealth + "\nMoney:" + playerMoney;
+        Enemy.OnDestroyed -= OnEnemyDestroyed;
     }
 
-    public void AddMoney(int amount)
+    void Awake ()
     {
-        PlayerMoney += amount;
+        instance = this;
+    }
+
+    void Start ()
+    {
+        gameActive = true;
         UpdateHealthAndMoneyText();
-        onMoneyChangedEvent.Invoke();
     }
 
-    public void OnEnemyDestroyed()
+    void UpdateHealthAndMoneyText ()
     {
-
+        healthAndMoneyText.text = $"Health: {health}\nMoney: ${money}";
     }
 
-    public void TakeMoney(int amount)
+    public void AddMoney (int amount)
     {
-        PlayerMoney -= amount;
+        money += amount;
         UpdateHealthAndMoneyText();
-        onMoneyChangedEvent.Invoke();
+
+        onMoneyChanged.Invoke();
     }
 
-    public void TakeDamage(int amount)
+    public void TakeMoney (int amount)
     {
-        playerHealth -= amount;
+        money -= amount;
         UpdateHealthAndMoneyText();
-        if (playerHealth <= 0) { GameOver(); }
+
+        onMoneyChanged.Invoke();
     }
 
-    public void GameOver()
+    public void TakeDamage (int amount)
     {
+        health -= amount;
+        UpdateHealthAndMoneyText();
 
+        if(health <= 0)
+            GameOver();
     }
 
-    public void WinGame()
+    void GameOver ()
     {
-
+        gameActive = false;
+        endScreen.gameObject.SetActive(true);
+        endScreen.SetEndScreen(false, waveSpawner.curWave);
     }
 
-    // Properties
-    public EnemyPath EnemyPath { get => enemyPath; set => enemyPath = value; }
-    public UnityEvent OnEnemyDestroyedEvent { get => onEnemyDestroyedEvent; set => onEnemyDestroyedEvent = value; }
-    public UnityEvent OnMoneyChangedEvent { get => onMoneyChangedEvent; set => onMoneyChangedEvent = value; }
-    public int PlayerMoney { get => playerMoney; set => playerMoney = value; }
-    public TowerPlacement TowerPlacement { get => towerPlacement; set => towerPlacement = value; }
+    void WinGame ()
+    {
+        gameActive = false;
+        endScreen.gameObject.SetActive(true);
+        endScreen.SetEndScreen(true, waveSpawner.curWave);
+    }
+
+    public void OnEnemyDestroyed ()
+    {
+        if(!gameActive)
+            return;
+
+        if(waveSpawner.remainingEnemies == 0 && waveSpawner.curWave == waveSpawner.waves.Length)
+        {
+            WinGame();
+        }
+    }
 }
