@@ -5,56 +5,66 @@ using TMPro;
 
 public class WaveSpawner : MonoBehaviour
 {
-    [Header("Wave Status")]
-    [SerializeField] WaveData[] waves;
-    [SerializeField] int currentWave = 0;
-    [SerializeField] int remainingEnemies;
+    public WaveData[] waves;
+    public int curWave = 0;
+
+    public int remainingEnemies;
 
     [Header("Components")]
-    [SerializeField] Transform enemySpawnPosition;
-    [SerializeField] TextMeshProUGUI waveText;
-    [SerializeField] GameObject nextWaveButton;
+    public Transform enemySpawnPos;
+    public TextMeshProUGUI waveText;
+    public GameObject nextWaveButton;
 
-    IEnumerator SpawnWave()
+    void OnEnable()
+    {
+        Enemy.OnDestroyed += OnEnemyDestroyed;
+    }
+
+    void OnDisable()
+    {
+        Enemy.OnDestroyed -= OnEnemyDestroyed;
+    }
+
+    public void SpawnNextWave ()
+    {
+        curWave++;
+
+        if(curWave - 1 == waves.Length)
+            return;
+
+        waveText.text = $"Wave: {curWave}";
+
+        StartCoroutine(SpawnWave());
+    }
+
+    IEnumerator SpawnWave ()
     {
         nextWaveButton.SetActive(false);
-        WaveData wave = waves[currentWave - 1];
+        WaveData wave = waves[curWave - 1];
 
-        for (int i = 0; i < wave.enemySets.Length; i++)
+        for(int x = 0; x < wave.enemySets.Length; x++)
         {
-            yield return new WaitForSeconds(wave.enemySets[i].SpawnDelay);
+            yield return new WaitForSeconds(wave.enemySets[x].spawnDelay);
 
-            for (int y = 0; y < wave.enemySets[i].SpawnCount; y++)
+            for(int y = 0; y < wave.enemySets[x].spawnCount; y++)
             {
-                SpawnEnemy(wave.enemySets[i].EnemyPrefab);
-                yield return new WaitForSeconds(wave.enemySets[i].SpawnRate);
+                SpawnEnemy(wave.enemySets[x].enemyPrefab);
+                yield return new WaitForSeconds(wave.enemySets[x].spawnRate);
             }
         }
     }
 
-    private void SpawnEnemy(GameObject enemyPrefab)
+    void SpawnEnemy (GameObject enemyPrefab)
     {
-        Instantiate(enemyPrefab, enemySpawnPosition.position, Quaternion.identity);
+        Instantiate(enemyPrefab, enemySpawnPos.position, Quaternion.identity);
         remainingEnemies++;
     }
 
-    public void OnEnemyDestroyed()
+    public void OnEnemyDestroyed ()
     {
         remainingEnemies--;
-        if (remainingEnemies == 0)
-        {
+
+        if(remainingEnemies == 0)
             nextWaveButton.SetActive(true);
-        }
     }
-
-    public void SpawnNextWave() {
-        currentWave++;
-        if (currentWave - 1 == waves.Length) 
-        {
-            return;
-        }
-        waveText.text = $"Wave : {currentWave}";
-        StartCoroutine(SpawnWave());
-    }
-
 }

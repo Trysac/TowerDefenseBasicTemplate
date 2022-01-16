@@ -6,42 +6,44 @@ using TMPro;
 
 public class TowerButtonUI : MonoBehaviour
 {
-    [SerializeField] TowerData tower;
-    //[SerializeField] TextMeshProUGUI towerNameText;
-    [SerializeField] TextMeshProUGUI towerCostText;
-    [SerializeField] Image towerIcon;
+    public TowerData tower;
+    public TextMeshProUGUI towerNameText;
+    public TextMeshProUGUI towerCostText;
+    public Image towerIcon;
 
     private Button button;
 
-    private void Awake()
+    void OnEnable ()
+    {
+        GameManager.instance.onMoneyChanged.AddListener(OnMoneyChanged);
+    }
+
+    void OnDisable ()
+    {
+        GameManager.instance.onMoneyChanged.RemoveListener(OnMoneyChanged);
+    }
+
+    void Awake ()
     {
         button = GetComponent<Button>();
     }
 
-    private void Start()
+    void Start ()
     {
-        //towerNameText.text = tower.DisplayName;
-        towerCostText.text = $"${tower.Cost}";
-        towerIcon.sprite = tower.Icon;
+        towerNameText.text = tower.displayName;
+        towerCostText.text = $"${tower.cost}";
+        towerIcon.sprite = tower.icon;
+
+        OnMoneyChanged();
     }
 
-    public void OnClick()
+    public void OnClick ()
     {
-        GameManager.instance.TowerPlacement.SelectTowerToPlace(tower);
+        GameManager.instance.towerPlacement.SelectTowerToPlace(tower);
     }
 
-    public void OnMoneyChanged()
+    void OnMoneyChanged ()
     {
-        button.interactable = GameManager.instance.PlayerMoney >= tower.Cost;
-    }
-
-    private void OnEnable()
-    {
-        GameManager.instance.OnMoneyChangedEvent.AddListener(OnMoneyChanged);
-    }
-
-    private void OnDisable()
-    {
-        GameManager.instance.OnMoneyChangedEvent.RemoveListener(OnMoneyChanged);
+        button.interactable = GameManager.instance.money >= tower.cost;
     }
 }

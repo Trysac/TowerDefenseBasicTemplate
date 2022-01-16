@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PreviewTower : MonoBehaviour
 {
-    [SerializeField] Transform towerRange;
+    public Transform rangeObject;
 
-    public void SetTower(TowerData tower)
+    public void SetTower (TowerData tower)
     {
-        towerRange.localScale = new Vector3(tower.Range * 2, 0.1f, tower.Range * 2);
+        rangeObject.localScale = new Vector3(tower.range * 2, 0.1f, tower.range * 2);
     }
-
 }

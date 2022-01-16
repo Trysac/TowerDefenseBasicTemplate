@@ -4,22 +4,18 @@ using UnityEngine;
 
 public class EnemyPath : MonoBehaviour
 {
-    [SerializeField] Transform[] waypoints;
+    public Transform[] waypoints;
 
-
-    private void OnDrawGizmos()
+    void OnDrawGizmos ()
     {
         Gizmos.color = Color.red;
-        for (int item = 0; item < Waypoints.Length; item++)
+
+        for(int x = 0; x < waypoints.Length; x++)
         {
-            Gizmos.DrawWireSphere(Waypoints[item].position, 0.25f);
-            if (item < Waypoints.Length - 1)
-            {
-                Gizmos.DrawLine(Waypoints[item].position, Waypoints[item + 1].position);
-            }
+            Gizmos.DrawWireSphere(waypoints[x].position, 0.25f);
+
+            if(x < waypoints.Length - 1)
+                Gizmos.DrawLine(waypoints[x].position, waypoints[x + 1].position);
         }
     }
-
-    // Properties
-    public Transform[] Waypoints { get => waypoints; set => waypoints = value; }
 }

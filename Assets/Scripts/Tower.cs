@@ -4,130 +4,125 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
+    public enum TowerTargetPriority
+    {
+        First,
+        Close,
+        Strong
+    }
+
     [Header("Info")]
-    [SerializeField] float range;
-    [SerializeField] List<Enemy> currentEnemiesInRange = new List<Enemy>();
-    [SerializeField] Enemy currentEnemy;
-    [SerializeField] Enums.TowerTargetPriority targetPriority;
-    [SerializeField] bool rotateTowardsTarget;
+    public float range;
+    private List<Enemy> curEnemiesInRange = new List<Enemy>();
+    private Enemy curEnemy;
+
+    public TowerTargetPriority targetPriority;
+    public bool rotateTowardsTarget;
 
     [Header("Attacking")]
-    [SerializeField] float attackRate;
-    [SerializeField] float lastAttackTime;
+    public float attackRate;
+    private float lastAttackTime;
+    public GameObject projectilePrefab;
+    public Transform projectileSpawnPos;
 
-    [Header("Projectile")]
-    [SerializeField] GameObject projectilePrefab;
-    [SerializeField] Transform projectileSpawnPosition;
-    [SerializeField] int projectileDamage;
-    [SerializeField] float projectileSpeed;
+    public int projectileDamage;
+    public float projectileSpeed;
 
-    // Private
-    private void Update()
+    void Update ()
     {
-        if (Time.time - lastAttackTime > attackRate)
+        // attack every "attackRate" seconds
+        if(Time.time - lastAttackTime > attackRate)
         {
             lastAttackTime = Time.time;
-            currentEnemy = getTarget();
-            if (currentEnemy != null)
-            {
+            curEnemy = GetEnemy();
+
+            if(curEnemy != null)
                 Attack();
-            }
         }
     }
 
-    private Enemy getTarget()
+    // returns the current enemy for the tower to attack
+    Enemy GetEnemy ()
     {
-        currentEnemiesInRange.RemoveAll(x => x == null);
+        curEnemiesInRange.RemoveAll(x => x == null);
 
-        if (currentEnemiesInRange.Count == 0)
-        {
+        if(curEnemiesInRange.Count == 0)
             return null;
-        }
 
-        if (currentEnemiesInRange.Count == 1)
-        {
-            return currentEnemiesInRange[0];
-        }
+        if(curEnemiesInRange.Count == 1)
+            return curEnemiesInRange[0];
 
-        switch (targetPriority)
+        switch(targetPriority)
         {
-            case Enums.TowerTargetPriority.First:
-                {
-                    return currentEnemiesInRange[0];
-                }
-            case Enums.TowerTargetPriority.Close:
-                {
-                    return getClosestEnemy();
-                }
-            case Enums.TowerTargetPriority.Strong:
-                {
-                    return getStrongestEnemy();
-                }
-            default:
-                {
-                    return null;
-                }
-        }
-    }
-
-    private void Attack()
-    {
-        if (rotateTowardsTarget)
-        {
-            this.transform.LookAt(currentEnemy.transform);
-            this.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-        }
-        GameObject projectile = Instantiate(projectilePrefab, projectileSpawnPosition.position, Quaternion.identity);
-        projectile.GetComponent<Projectile>().Initializer(currentEnemy, projectileDamage, projectileSpeed);
-    }
-
-    private Enemy getClosestEnemy()
-    {
-        Enemy closest = null;
-        float distanceA = 999999;
-        for (int i = 0; i < currentEnemiesInRange.Count; i++)
-        {
-            //Usefull for seen what object is closest to us
-            float distanceB = (this.transform.position - currentEnemiesInRange[i].transform.position).sqrMagnitude;
-            if (distanceB < distanceA)
+            case TowerTargetPriority.First:
             {
-                closest = currentEnemiesInRange[i];
-                distanceA = distanceB;
+                return curEnemiesInRange[0];
+            }
+            case TowerTargetPriority.Close:
+            {
+                Enemy closest = null;
+                float dist = 99;
+
+                for(int x = 0; x < curEnemiesInRange.Count; x++)
+                {
+                    float d = (transform.position - curEnemiesInRange[x].transform.position).sqrMagnitude;
+
+                    if(d < dist)
+                    {
+                        closest = curEnemiesInRange[x];
+                        dist = d;
+                    }
+                }
+
+                return closest;
+            }
+            case TowerTargetPriority.Strong:
+            {
+                Enemy strongest = null;
+                int strongestHealth = 0;
+
+                foreach(Enemy enemy in curEnemiesInRange)
+                {
+                    if(enemy.health > strongestHealth)
+                    {
+                        strongest = enemy;
+                        strongestHealth = enemy.health;
+                    }
+                }
+
+                return strongest;
             }
         }
-        return closest;
+
+        return null;
     }
 
-    private Enemy getStrongestEnemy()
+    // attacks the curEnemy
+    void Attack ()
     {
-        Enemy strongest = null;
-        int strongestHealth = 0;
-        foreach (Enemy enemy in currentEnemiesInRange)
+        if(rotateTowardsTarget)
         {
-            if (enemy.Health > strongestHealth)
-            {
-                strongestHealth = enemy.Health;
-            }
+            transform.LookAt(curEnemy.transform);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
-        return strongest;
+
+        GameObject proj = Instantiate(projectilePrefab, projectileSpawnPos.position, Quaternion.identity);
+        proj.GetComponent<Projectile>().Initialize(curEnemy, projectileDamage, projectileSpeed);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter (Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if(other.CompareTag("Enemy"))
         {
-            currentEnemiesInRange.Add(other.GetComponent<Enemy>());
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            currentEnemiesInRange.Remove(other.GetComponent<Enemy>());
+            curEnemiesInRange.Add(other.GetComponent<Enemy>());
         }
     }
 
-    //Public
-
-
+    private void OnTriggerExit (Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            curEnemiesInRange.Remove(other.GetComponent<Enemy>());
+        }
+    }
 }
