@@ -5,66 +5,98 @@ using TMPro;
 
 public class WaveSpawner : MonoBehaviour
 {
-    public WaveData[] waves;
-    public int curWave = 0;
 
-    public int remainingEnemies;
+    #region // Private Variables
+
+    [Header("Waves Configuration Parameters")]
+    [SerializeField] WaveData[] waves;
+    [SerializeField] int curWave = 0;
+    [SerializeField] [Tooltip("Serialized just for debugind purpose")] int remainingEnemies;
 
     [Header("Components")]
-    public Transform enemySpawnPos;
-    public TextMeshProUGUI waveText;
-    public GameObject nextWaveButton;
+    [SerializeField] Transform enemySpawnPos;
+    [SerializeField] TextMeshProUGUI waveText;
+    [SerializeField] GameObject nextWaveButton;
 
-    void OnEnable()
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Public Methods
+
+    public void SpawnNextWave()
     {
-        Enemy.OnDestroyed += OnEnemyDestroyed;
-    }
+        CurWave++;
 
-    void OnDisable()
-    {
-        Enemy.OnDestroyed -= OnEnemyDestroyed;
-    }
-
-    public void SpawnNextWave ()
-    {
-        curWave++;
-
-        if(curWave - 1 == waves.Length)
+        if (CurWave - 1 == Waves.Length)
             return;
 
-        waveText.text = $"Wave: {curWave}";
+        WaveText.text = $"Wave: {CurWave}";
 
         StartCoroutine(SpawnWave());
     }
 
-    IEnumerator SpawnWave ()
+    public IEnumerator SpawnWave()
     {
-        nextWaveButton.SetActive(false);
-        WaveData wave = waves[curWave - 1];
+        NextWaveButton.SetActive(false);
+        WaveData wave = Waves[CurWave - 1];
 
-        for(int x = 0; x < wave.enemySets.Length; x++)
+        for (int x = 0; x < wave.EnemySets.Length; x++)
         {
-            yield return new WaitForSeconds(wave.enemySets[x].spawnDelay);
+            yield return new WaitForSeconds(wave.EnemySets[x].spawnDelay);
 
-            for(int y = 0; y < wave.enemySets[x].spawnCount; y++)
+            for (int y = 0; y < wave.EnemySets[x].spawnCount; y++)
             {
-                SpawnEnemy(wave.enemySets[x].enemyPrefab);
-                yield return new WaitForSeconds(wave.enemySets[x].spawnRate);
+                SpawnEnemy(wave.EnemySets[x].enemyPrefab);
+                yield return new WaitForSeconds(wave.EnemySets[x].spawnRate);
             }
         }
     }
 
-    void SpawnEnemy (GameObject enemyPrefab)
+    public void SpawnEnemy(GameObject enemyPrefab)
     {
-        Instantiate(enemyPrefab, enemySpawnPos.position, Quaternion.identity);
-        remainingEnemies++;
+        Instantiate(enemyPrefab, EnemySpawnPos.position, Quaternion.identity);
+        RemainingEnemies++;
     }
 
-    public void OnEnemyDestroyed ()
+    public void OnEnemyDestroyed()
     {
-        remainingEnemies--;
+        RemainingEnemies--;
 
-        if(remainingEnemies == 0)
-            nextWaveButton.SetActive(true);
+        if (RemainingEnemies == 0)
+            NextWaveButton.SetActive(true);
     }
+
+    public void OnEnable()
+    {
+        Enemy.OnDestroyed += OnEnemyDestroyed;
+    }
+
+    public void OnDisable()
+    {
+        Enemy.OnDestroyed -= OnEnemyDestroyed;
+    }
+
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Variables Properties
+
+    public WaveData[] Waves { get => waves; set => waves = value; }
+    public int CurWave { get => curWave; set => curWave = value; }
+    public int RemainingEnemies { get => remainingEnemies; set => remainingEnemies = value; }
+    public Transform EnemySpawnPos { get => enemySpawnPos; set => enemySpawnPos = value; }
+    public TextMeshProUGUI WaveText { get => waveText; set => waveText = value; }
+    public GameObject NextWaveButton { get => nextWaveButton; set => nextWaveButton = value; }
+
+    #endregion
+
+
+
+
+
+
+
+
 }

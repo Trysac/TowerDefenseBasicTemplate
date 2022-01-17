@@ -5,63 +5,99 @@ using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
-    public int health;
-    public int damageToPlayer;
-    public int moneyOnDeath;
-    public float moveSpeed;
+    #region // Private Variables
 
-    // Path
+    [Header("Enemy Stats")]
+    [SerializeField] int health;
+    [SerializeField] int damageToPlayer;
+    [SerializeField] int moneyOnDeath;
+    [SerializeField] float moveSpeed;
+
+    [Header("Enemy UI elements")]
+    [SerializeField] GameObject healthBarPrefab;
+
+    [Header("Enemy Path")]
     private Transform[] path;
     private int curPathWaypoint;
 
-    public GameObject healthBarPrefab;
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Public Variables
 
     public static event UnityAction OnDestroyed;
 
-    void Start ()
-    {
-        path = GameManager.instance.enemyPath.waypoints;
+    #endregion
 
-        // create the health bar
+    // ------------------------------------------------
+
+    #region // Public Methods
+
+    public void Start()
+    {
+        path = GameManager.instance.enemyPath.Waypoints;
+        CreateHealthBar();
+    }
+
+    public void Update()
+    {
+        MoveAlongPath(); // called every frame to move the enemy towards the end of the path
+    }
+
+    public void TakeDamage(int amount) //// called when a tower deals damage to the enemy
+    {
+        Health -= amount;
+
+        if (Health <= 0)
+        {
+            GameManager.instance.AddMoney(MoneyOnDeath);
+            OnDestroyed.Invoke();
+            Destroy(gameObject);
+        }
+    }
+
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Private Methods
+
+    private void CreateHealthBar()
+    {
         Canvas canvas = FindObjectOfType<Canvas>();
-        GameObject healthBar = Instantiate(healthBarPrefab, canvas.transform);
+        GameObject healthBar = Instantiate(HealthBarPrefab, canvas.transform);
         healthBar.GetComponent<EnemyHealthBar>().Initialize(this);
     }
 
-    void Update ()
+    private void MoveAlongPath()
     {
-        MoveAlongPath();
-    }
-
-    // called every frame to move the enemy towards the end of the path
-    void MoveAlongPath ()
-    {
-        if(curPathWaypoint < path.Length)
+        if (curPathWaypoint < path.Length)
         {
-            transform.position = Vector3.MoveTowards(transform.position, path[curPathWaypoint].position, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, path[curPathWaypoint].position, MoveSpeed * Time.deltaTime);
 
-            if(transform.position == path[curPathWaypoint].position)
+            if (transform.position == path[curPathWaypoint].position)
                 curPathWaypoint++;
         }
-        // if we're at the end of the path
-        else
+        else // if we're at the end of the path
         {
-            GameManager.instance.TakeDamage(damageToPlayer);
+            GameManager.instance.TakeDamage(DamageToPlayer);
             OnDestroyed.Invoke();
             Destroy(gameObject);
         }
     }
 
-    // called when a tower deals damage to the enemy
-    public void TakeDamage (int amount)
-    {
-        health -= amount;
+    #endregion
 
-        if(health <= 0)
-        {
-            GameManager.instance.AddMoney(moneyOnDeath);
-            OnDestroyed.Invoke();
-            Destroy(gameObject);
-        }
-    }
+    // ------------------------------------------------
+
+    #region // Variable Properties
+
+    public int Health { get => health; set => health = value; }
+    public int DamageToPlayer { get => damageToPlayer; set => damageToPlayer = value; }
+    public int MoneyOnDeath { get => moneyOnDeath; set => moneyOnDeath = value; }
+    public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+    public GameObject HealthBarPrefab { get => healthBarPrefab; set => healthBarPrefab = value; }
+
+    #endregion
 }
