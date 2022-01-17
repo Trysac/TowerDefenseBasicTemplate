@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
 
     public void Start()
     {
-        path = GameManager.instance.enemyPath.Waypoints;
+        path = GameManager.instance.EnemyPath.Waypoints;
         CreateHealthBar();
     }
 

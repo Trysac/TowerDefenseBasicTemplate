@@ -6,23 +6,44 @@ using UnityEngine.SceneManagement;
 
 public class EndScreenUI : MonoBehaviour
 {
-    public TextMeshProUGUI headerText;
-    public TextMeshProUGUI bodyText;
+    #region // Private Variables
 
-    public void SetEndScreen (bool didWin, int roundsSurvived)
+    [Header("UI Elements")]
+    [SerializeField] TextMeshProUGUI headerText;
+    [SerializeField] TextMeshProUGUI bodyText;
+
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Public Methods
+
+    public void SetEndScreen(bool didWin, int roundsSurvived)
     {
-        headerText.text = didWin ? "You Win!" : "Game Over!";
-        headerText.color = didWin ? Color.green : Color.red;
-        bodyText.text = $"You survived {roundsSurvived} rounds.";
+        HeaderText.text = didWin ? "You Win!" : "Game Over!";
+        HeaderText.color = didWin ? Color.green : Color.red;
+        BodyText.text = $"You survived {roundsSurvived} rounds.";
     }
 
-    public void OnPlayAgainButton ()
+    public void OnPlayAgainButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void OnQuitButton ()
+    public void OnQuitButton()
     {
         Application.Quit();
     }
+
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Variables Properties
+
+    public TextMeshProUGUI HeaderText { get => headerText; set => headerText = value; }
+    public TextMeshProUGUI BodyText { get => bodyText; set => bodyText = value; }
+
+    #endregion
+
 }

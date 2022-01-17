@@ -6,44 +6,68 @@ using TMPro;
 
 public class TowerButtonUI : MonoBehaviour
 {
-    public TowerData tower;
-    public TextMeshProUGUI towerNameText;
-    public TextMeshProUGUI towerCostText;
-    public Image towerIcon;
+    #region // Private Variables
+
+    [Header("Tower UI Elements")]
+    [SerializeField] TowerData towerData;
+    [SerializeField] TextMeshProUGUI towerNameText;
+    [SerializeField] TextMeshProUGUI towerCostText;
+    [SerializeField] Image towerIcon;
 
     private Button button;
 
-    void OnEnable ()
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Public Methods
+
+    public void Awake()
     {
-        GameManager.instance.onMoneyChanged.AddListener(OnMoneyChanged);
+        Button = GetComponent<Button>();
     }
 
-    void OnDisable ()
+    public void Start()
     {
-        GameManager.instance.onMoneyChanged.RemoveListener(OnMoneyChanged);
-    }
-
-    void Awake ()
-    {
-        button = GetComponent<Button>();
-    }
-
-    void Start ()
-    {
-        towerNameText.text = tower.displayName;
-        towerCostText.text = $"${tower.cost}";
-        towerIcon.sprite = tower.icon;
+        TowerNameText.text = TowerData.displayName;
+        TowerCostText.text = $"${TowerData.cost}";
+        TowerIcon.sprite = TowerData.icon;
 
         OnMoneyChanged();
     }
 
-    public void OnClick ()
+    public void OnClick()
     {
-        GameManager.instance.towerPlacement.SelectTowerToPlace(tower);
+        GameManager.instance.TowerPlacement.SelectTowerToPlace(TowerData);
     }
 
-    void OnMoneyChanged ()
+    public void OnMoneyChanged()
     {
-        button.interactable = GameManager.instance.PlayerMoney >= tower.cost;
+        Button.interactable = GameManager.instance.PlayerMoney >= TowerData.cost;
     }
+
+    public void OnEnable()
+    {
+        GameManager.instance.OnMoneyChanged.AddListener(OnMoneyChanged);
+    }
+
+    public void OnDisable()
+    {
+        GameManager.instance.OnMoneyChanged.RemoveListener(OnMoneyChanged);
+    }
+
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Variables Properties
+
+    public TowerData TowerData { get => towerData; set => towerData = value; }
+    public TextMeshProUGUI TowerNameText { get => towerNameText; set => towerNameText = value; }
+    public TextMeshProUGUI TowerCostText { get => towerCostText; set => towerCostText = value; }
+    public Image TowerIcon { get => towerIcon; set => towerIcon = value; }
+    public Button Button { get => button; set => button = value; }
+
+    #endregion
+
 }
