@@ -29,9 +29,9 @@ public class TowerButtonUI : MonoBehaviour
 
     public void Start()
     {
-        TowerNameText.text = TowerData.displayName;
-        TowerCostText.text = $"${TowerData.cost}";
-        TowerIcon.sprite = TowerData.icon;
+        TowerNameText.text = TowerData.TowerDisplayName;
+        TowerCostText.text = $"${TowerData.TowerCost}";
+        TowerIcon.sprite = TowerData.TowerIcon;
 
         OnMoneyChanged();
     }
@@ -43,7 +43,7 @@ public class TowerButtonUI : MonoBehaviour
 
     public void OnMoneyChanged()
     {
-        Button.interactable = GameManager.instance.PlayerMoney >= TowerData.cost;
+        Button.interactable = GameManager.instance.PlayerMoney >= TowerData.TowerCost;
     }
 
     public void OnEnable()

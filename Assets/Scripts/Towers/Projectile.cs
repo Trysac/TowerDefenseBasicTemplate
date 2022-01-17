@@ -4,33 +4,35 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    #region // Private Variables
+
+    [Header("General Parameters")]
+    [SerializeField] GameObject hitSpawnPrefab;
+
     private Enemy target;
     private int damage;
     private float moveSpeed;
 
-    public GameObject hitSpawnPrefab;
+    #endregion
 
-    public void Initialize (Enemy target, int damage, float moveSpeed)
-    {
-        this.target = target;
-        this.damage = damage;
-        this.moveSpeed = moveSpeed;
-    }
+    // ------------------------------------------------
 
-    void Update ()
+    #region // Public Methods
+
+    public void Update()
     {
-        if(target != null)
+        if (target != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, moveSpeed * Time.deltaTime);
 
             transform.LookAt(target.transform);
 
-            if(Vector3.Distance(transform.position, target.transform.position) < 0.2f)
+            if (Vector3.Distance(transform.position, target.transform.position) < 0.2f)
             {
                 target.TakeDamage(damage);
 
-                if(hitSpawnPrefab != null)
-                    Instantiate(hitSpawnPrefab, transform.position, Quaternion.identity);
+                if (HitSpawnPrefab != null)
+                    Instantiate(HitSpawnPrefab, transform.position, Quaternion.identity);
 
                 Destroy(gameObject);
             }
@@ -38,6 +40,24 @@ public class Projectile : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
+        }     
     }
+
+    public void Initialize(Enemy target, int damage, float moveSpeed)
+    {
+        this.target = target;
+        this.damage = damage;
+        this.moveSpeed = moveSpeed;
+    }
+
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Variables Properties
+
+    public GameObject HitSpawnPrefab { get => hitSpawnPrefab; set => hitSpawnPrefab = value; }
+
+    #endregion
+
 }
