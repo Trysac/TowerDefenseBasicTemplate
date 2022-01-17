@@ -5,7 +5,6 @@ using TMPro;
 
 public class WaveSpawner : MonoBehaviour
 {
-
     #region // Private Variables
 
     [Header("Waves Configuration Parameters")]
