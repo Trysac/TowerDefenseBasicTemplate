@@ -5,81 +5,111 @@ using UnityEngine.InputSystem;
 
 public class TowerPlacement : MonoBehaviour
 {
-    public LayerMask tileLayerMask;
-    public float towerPlaceYOffset = 0.1f;
-    public PreviewTower previewTower;
+    #region // Private Variables
+
+    [Header("Tower Placement Parameters")]
+    [SerializeField] LayerMask tileLayerMask;
+    [SerializeField] float towerPlaceYOffset = 0.1f;
+    [SerializeField] PreviewTower previewTower;
 
     private TowerData towerToPlaceDown;
-    private bool placingTower;
-    private TowerTile curSelectedTile;
+    private TowerTile cursorSelectedTile;
+    private bool isPlacingTower;
 
-    private Camera cam;
+    private Camera inGameCamera;
 
-    void Awake ()
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Public Methods
+
+    public void Awake()
     {
-        cam = Camera.main;
+        InGameCamera = Camera.main;
     }
 
-    // called when we select a tower UI buy button
-    public void SelectTowerToPlace (TowerData tower)
+    void Update()
     {
-        towerToPlaceDown = tower;
-        placingTower = true;
-
-        previewTower.gameObject.SetActive(true);
-        previewTower.SetTower(tower);
-    }
-
-    void Update ()
-    {
-        if(placingTower)
+        if (IsPlacingTower)
         {
-            Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Ray ray = InGameCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             RaycastHit hit;
 
             // shoot a raycast from our mouse cursor
-            if(Physics.Raycast(ray, out hit, 99, tileLayerMask))
+            if (Physics.Raycast(ray, out hit, 99, TileLayerMask))
             {
-                curSelectedTile = hit.collider.GetComponent<TowerTile>();
-                previewTower.transform.position = curSelectedTile.transform.position + new Vector3(0, towerPlaceYOffset, 0);
+                CursorSelectedTile = hit.collider.GetComponent<TowerTile>();
+                PreviewTower.transform.position = CursorSelectedTile.transform.position + new Vector3(0, TowerPlaceYOffset, 0);
             }
             else
             {
-                curSelectedTile = null;
-                previewTower.transform.position = new Vector3(0, 999, 0);
+                CursorSelectedTile = null;
+                PreviewTower.transform.position = new Vector3(0, 999, 0);
             }
 
             // placing down the tower
-            if(Mouse.current.leftButton.isPressed && curSelectedTile != null && curSelectedTile.tower == null)
+            if (Mouse.current.leftButton.isPressed && CursorSelectedTile != null && CursorSelectedTile.Tower == null)
             {
                 PlaceTower();
             }
 
             // cancelling the tower placement
-            if(Mouse.current.rightButton.isPressed)
+            if (Mouse.current.rightButton.isPressed)
             {
                 CancelPlacement();
             }
         }
     }
 
-    void PlaceTower ()
+    public void SelectTowerToPlace(TowerData tower) // called when we select a tower UI buy button
     {
-        Vector3 pos = curSelectedTile.transform.position + new Vector3(0, towerPlaceYOffset, 0);
-        GameObject tower = Instantiate(towerToPlaceDown.spawnPrefab, pos, Quaternion.identity);
+        TowerToPlaceDown = tower;
+        IsPlacingTower = true;
 
-        curSelectedTile.tower = tower.GetComponent<Tower>();
+        PreviewTower.gameObject.SetActive(true);
+        PreviewTower.SetTower(tower);
+    }
 
-        GameManager.instance.TakeMoney(towerToPlaceDown.cost);
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Private Methods
+
+    private void PlaceTower()
+    {
+        Vector3 pos = CursorSelectedTile.transform.position + new Vector3(0, TowerPlaceYOffset, 0);
+        GameObject tower = Instantiate(TowerToPlaceDown.TowerPrefab, pos, Quaternion.identity);
+
+        CursorSelectedTile.Tower = tower.GetComponent<Tower>();
+
+        GameManager.instance.TakeMoney(TowerToPlaceDown.TowerCost);
 
         CancelPlacement();
     }
 
-    void CancelPlacement ()
+    private void CancelPlacement()
     {
-        towerToPlaceDown = null;
-        placingTower = false;
-        curSelectedTile = null;
-        previewTower.gameObject.SetActive(false);
+        TowerToPlaceDown = null;
+        IsPlacingTower = false;
+        CursorSelectedTile = null;
+        PreviewTower.gameObject.SetActive(false);
     }
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Variables Properties
+
+    public LayerMask TileLayerMask { get => tileLayerMask; set => tileLayerMask = value; }
+    public float TowerPlaceYOffset { get => towerPlaceYOffset; set => towerPlaceYOffset = value; }
+    public PreviewTower PreviewTower { get => previewTower; set => previewTower = value; }
+    public TowerData TowerToPlaceDown { get => towerToPlaceDown; set => towerToPlaceDown = value; }
+    public TowerTile CursorSelectedTile { get => cursorSelectedTile; set => cursorSelectedTile = value; }
+    public bool IsPlacingTower { get => isPlacingTower; set => isPlacingTower = value; }
+    public Camera InGameCamera { get => inGameCamera; set => inGameCamera = value; }
+
+    #endregion
+
 }
