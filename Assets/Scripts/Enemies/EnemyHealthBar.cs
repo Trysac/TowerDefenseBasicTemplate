@@ -5,28 +5,34 @@ using UnityEngine.UI;
 
 public class EnemyHealthBar : MonoBehaviour
 {
+    #region // Public Variables
+
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Private Variables
+
+    [Header("EnemyHealthBar Components")]
+    [SerializeField] Image fill;
+    [SerializeField] Gradient colorGradient;
+
     private Enemy enemy;
     private int startHealth;
-
-    public Image fill;
-    public Gradient colorGradient;
-
     private Camera cam;
 
-    public void Initialize (Enemy enemy)
-    {
-        this.enemy = enemy;
-        startHealth = enemy.health;
+    #endregion
 
-        cam = Camera.main;
-    }
+    // ------------------------------------------------
 
-    void Update ()
+    #region // Public Methods
+
+    public void Update()
     {
-        if(enemy != null)
+        if (enemy != null)
         {
-            fill.fillAmount = (float)enemy.health / (float)startHealth;
-            fill.color = colorGradient.Evaluate(fill.fillAmount);
+            Fill.fillAmount = (float)enemy.Health / (float)startHealth;
+            Fill.color = ColorGradient.Evaluate(Fill.fillAmount);
 
             transform.position = cam.WorldToScreenPoint(enemy.transform.position) + new Vector3(0, Screen.height / 30.0f);
         }
@@ -35,4 +41,23 @@ public class EnemyHealthBar : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void Initialize(Enemy enemy)
+    {
+        this.enemy = enemy;
+        startHealth = enemy.Health;
+        cam = Camera.main;
+    }
+
+    #endregion
+
+    // ------------------------------------------------
+
+    #region // Variables Properties
+
+    public Image Fill { get => fill; set => fill = value; }
+    public Gradient ColorGradient { get => colorGradient; set => colorGradient = value; }
+
+    #endregion
+
 }

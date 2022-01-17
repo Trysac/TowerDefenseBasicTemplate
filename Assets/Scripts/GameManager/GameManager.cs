@@ -78,14 +78,14 @@ public class GameManager : MonoBehaviour
     {
         gameActive = false;
         endScreen.gameObject.SetActive(true);
-        endScreen.SetEndScreen(false, waveSpawner.curWave);
+        endScreen.SetEndScreen(false, waveSpawner.CurWave);
     }
 
     void WinGame ()
     {
         gameActive = false;
         endScreen.gameObject.SetActive(true);
-        endScreen.SetEndScreen(true, waveSpawner.curWave);
+        endScreen.SetEndScreen(true, waveSpawner.CurWave);
     }
 
     public void OnEnemyDestroyed ()
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         if(!gameActive)
             return;
 
-        if(waveSpawner.remainingEnemies == 0 && waveSpawner.curWave == waveSpawner.waves.Length)
+        if(waveSpawner.RemainingEnemies == 0 && waveSpawner.CurWave == waveSpawner.Waves.Length)
         {
             WinGame();
         }

@@ -83,10 +83,10 @@ public class Tower : MonoBehaviour
 
                 foreach(Enemy enemy in curEnemiesInRange)
                 {
-                    if(enemy.health > strongestHealth)
+                    if(enemy.Health > strongestHealth)
                     {
                         strongest = enemy;
-                        strongestHealth = enemy.health;
+                        strongestHealth = enemy.Health;
                     }
                 }
 
