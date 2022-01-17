@@ -5,12 +5,6 @@ using UnityEngine.UI;
 
 public class EnemyHealthBar : MonoBehaviour
 {
-    #region // Public Variables
-
-    #endregion
-
-    // ------------------------------------------------
-
     #region // Private Variables
 
     [Header("EnemyHealthBar Components")]
