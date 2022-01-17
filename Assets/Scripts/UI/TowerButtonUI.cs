@@ -44,6 +44,6 @@ public class TowerButtonUI : MonoBehaviour
 
     void OnMoneyChanged ()
     {
-        button.interactable = GameManager.instance.money >= tower.cost;
+        button.interactable = GameManager.instance.PlayerMoney >= tower.cost;
     }
 }
