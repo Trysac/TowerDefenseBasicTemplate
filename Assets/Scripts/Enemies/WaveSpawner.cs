@@ -6,10 +6,10 @@ public class WaveSpawner : MonoBehaviour
 {
     #region // Private Variables
 
-    [Header("Waves Configuration Parameters")]
-    [SerializeField] WaveData[] waves;
-    [SerializeField] int curWave = 0;
+    [Header("Waves Configuration Parameters")] 
+    [SerializeField] int currentWave = 0;
     [SerializeField] [Tooltip("Serialized just for debugind purpose")] int remainingEnemies;
+    [SerializeField] WaveData[] waves;
 
     [Header("Components")]
     [SerializeField] Transform enemySpawnPos;
@@ -24,12 +24,12 @@ public class WaveSpawner : MonoBehaviour
 
     public void SpawnNextWave()
     {
-        CurWave++;
+        CurrentWave++;
 
-        if (CurWave - 1 == Waves.Length)
+        if (CurrentWave - 1 == Waves.Length)
             return;
 
-        WaveText.text = $"Wave: {CurWave}";
+        WaveText.text = $"Wave: {CurrentWave}";
 
         StartCoroutine(SpawnWave());
     }
@@ -37,7 +37,7 @@ public class WaveSpawner : MonoBehaviour
     public IEnumerator SpawnWave()
     {
         NextWaveButton.SetActive(false);
-        WaveData wave = Waves[CurWave - 1];
+        WaveData wave = Waves[CurrentWave - 1];
 
         for (int x = 0; x < wave.EnemySets.Length; x++)
         {
@@ -82,7 +82,7 @@ public class WaveSpawner : MonoBehaviour
     #region // Variables Properties
 
     public WaveData[] Waves { get => waves; set => waves = value; }
-    public int CurWave { get => curWave; set => curWave = value; }
+    public int CurrentWave { get => currentWave; set => currentWave = value; }
     public int RemainingEnemies { get => remainingEnemies; set => remainingEnemies = value; }
     public Transform EnemySpawnPos { get => enemySpawnPos; set => enemySpawnPos = value; }
     public TextMeshProUGUI WaveText { get => waveText; set => waveText = value; }
