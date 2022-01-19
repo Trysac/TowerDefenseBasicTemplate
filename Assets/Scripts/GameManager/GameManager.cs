@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour
     [Header("Game state")]
     [SerializeField] int playerHealth;
     [SerializeField] int playerMoney;
-    [SerializeField] bool isGameActive;
+
+    private bool isGameActive;
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI healthAndMoneyText;
@@ -96,7 +97,7 @@ public class GameManager : MonoBehaviour
     {
         if (!IsGameActive) { return;}
             
-        if (WaveSpawner.RemainingEnemies == 0 && WaveSpawner.CurWave == WaveSpawner.Waves.Length)
+        if (WaveSpawner.RemainingEnemies == 0 && WaveSpawner.CurrentWave == WaveSpawner.Waves.Length)
         {
             WinGame();
         }
@@ -106,14 +107,14 @@ public class GameManager : MonoBehaviour
     {
         IsGameActive = false;
         EndScreen.gameObject.SetActive(true);
-        EndScreen.SetEndScreen(true, WaveSpawner.CurWave);
+        EndScreen.SetEndScreen(true, WaveSpawner.CurrentWave);
     }
 
     private void GameOver()
     {
         IsGameActive = false;
         EndScreen.gameObject.SetActive(true);
-        EndScreen.SetEndScreen(false, WaveSpawner.CurWave);
+        EndScreen.SetEndScreen(false, WaveSpawner.CurrentWave);
     }
 
     #endregion
