@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour
 
     private void CreateHealthBar()
     {
-        Canvas canvas = FindObjectOfType<Canvas>();
+        Canvas canvas = FindAnyObjectByType<Canvas>();
         GameObject healthBar = Instantiate(HealthBarPrefab, canvas.transform);
         healthBar.GetComponent<EnemyHealthBar>().Initialize(this);
     }
