@@ -46,13 +46,17 @@ namespace SaucerSiege.Core
 
         /// <summary>
         /// An enemy reached the base and costs it <paramref name="damage"/> lives.
-        /// Returns true when the base has fallen.
+        /// Returns true only for the leak that destroys the base; later leaks change nothing.
         /// </summary>
         public bool Leak(int damage)
         {
             if (damage < 0) throw new ArgumentOutOfRangeException(nameof(damage));
-            Lives -= damage;
-            return Lives <= 0;
+            if (IsDefeated)
+            {
+                return false;
+            }
+            Lives = Math.Max(0, Lives - damage);
+            return Lives == 0;
         }
     }
 }

@@ -40,5 +40,17 @@ namespace SaucerSiege.Core.Tests
             Assert.That(economy.IsDefeated, Is.True);
             Assert.That(economy.StartingLives, Is.EqualTo(3));
         }
+
+        [Test]
+        public void TheBaseFallsOnlyOnce()
+        {
+            // Every leak after the base fell used to report the defeat again and reopen the
+            // game over screen.
+            var economy = new Economy(0, 1);
+            Assert.That(economy.Leak(1), Is.True);
+            Assert.That(economy.Leak(1), Is.False);
+            Assert.That(economy.Lives, Is.EqualTo(0));
+            Assert.That(economy.IsDefeated, Is.True);
+        }
     }
 }
