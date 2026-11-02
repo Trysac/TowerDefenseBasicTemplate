@@ -53,6 +53,8 @@ or, without a player,
 | Game speed 1x, 2x, 3x | Speed button | F | Select |
 | Pause (volume settings inside) | II button | Esc or P | Start |
 | Mute | Pause menu | M | — |
+| Restart the level (pause or result screen) | Menu button | R | Y |
+| Back to level select (pause or result screen) | Menu button | Q | X |
 
 ## How it plays
 
