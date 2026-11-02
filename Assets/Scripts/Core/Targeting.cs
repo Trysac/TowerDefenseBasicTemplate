@@ -43,7 +43,7 @@ namespace SaucerSiege.Core
         {
             int best = -1;
             float bestScore = 0f;
-            float closest = 99f;
+            float closest = float.MaxValue;
             float rangeSquared = range * range;
             for (int i = 0; i < candidates.Count; i++)
             {
