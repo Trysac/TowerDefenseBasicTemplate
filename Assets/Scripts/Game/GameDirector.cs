@@ -161,13 +161,15 @@ namespace SaucerSiege.Game
             session.Restart();
         }
 
+        /// <summary>After a win, the next battlefield (if any); otherwise the same one again.</summary>
         public void NextLevel()
         {
             Click();
-            if (!session.StartNextLevel())
+            if (session.LastResult.Won && session.StartNextLevel())
             {
-                session.Restart();
+                return;
             }
+            session.Restart();
         }
 
         public void TogglePause()
