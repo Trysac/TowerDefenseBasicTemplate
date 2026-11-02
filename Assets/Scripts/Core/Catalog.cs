@@ -121,7 +121,7 @@ namespace SaucerSiege.Core
                 new TowerTier(cost: 50, damage: 5, range: 2.9f, cooldown: 0.47f, shotSpeed: 15f),
                 new TowerTier(cost: 85, damage: 8, range: 3.3f, cooldown: 0.38f, shotSpeed: 16f),
             }),
-            new TowerStats("Cannon", "Heavy shells, small blast", homing: false, new[]
+            new TowerStats("Cannon", "Shells, small blast", homing: false, new[]
             {
                 new TowerTier(cost: 75, damage: 7, range: 2.3f, cooldown: 1.15f, shotSpeed: 8f, splash: 0.7f),
                 new TowerTier(cost: 70, damage: 11, range: 2.5f, cooldown: 1.05f, shotSpeed: 8.5f, splash: 0.85f),
@@ -133,7 +133,7 @@ namespace SaucerSiege.Core
                 new TowerTier(cost: 55, damage: 2, range: 2.45f, cooldown: 0.7f, shotSpeed: 12f, splash: 0.45f, slowFactor: 0.45f, slowSeconds: 1.8f),
                 new TowerTier(cost: 90, damage: 3, range: 2.7f, cooldown: 0.6f, shotSpeed: 13f, splash: 0.65f, slowFactor: 0.35f, slowSeconds: 2.2f),
             }),
-            new TowerStats("Mortar", "Slow, huge blast, longest reach", homing: false, new[]
+            new TowerStats("Mortar", "Huge blast, long reach", homing: false, new[]
             {
                 new TowerTier(cost: 120, damage: 12, range: 3.6f, cooldown: 2.3f, shotSpeed: 5f, splash: 1.2f),
                 new TowerTier(cost: 100, damage: 19, range: 4f, cooldown: 2.1f, shotSpeed: 5.3f, splash: 1.4f),

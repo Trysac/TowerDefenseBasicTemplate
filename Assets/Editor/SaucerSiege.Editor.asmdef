@@ -1,0 +1,19 @@
+{
+    "name": "SaucerSiege.Editor",
+    "rootNamespace": "SaucerSiege.EditorTools",
+    "references": [
+        "SaucerSiege.Core",
+        "SaucerSiege.Game"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

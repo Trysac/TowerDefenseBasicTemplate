@@ -4,5 +4,9 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SaucerSiege.unity
+    guid: 18bba0cd7c71a6e4682d44798b43e0ed
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

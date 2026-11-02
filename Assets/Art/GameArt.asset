@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f1019558d4a0d489c6e82b1493019a, type: 3}
+  m_Name: GameArt
+  m_EditorClassIdentifier: SaucerSiege.Game::SaucerSiege.Game.GameArt
+  TileSize: 0.99999994
+  TileTop: 0.19999999
+  Meadow:
+    Ground: {fileID: 919132149155446097, guid: 63a84a08cbdfede4fae1fe34703ef063, type: 3}
+    Straight: {fileID: 919132149155446097, guid: 3f13a91d09f7eba4a91e9d71af0005e5, type: 3}
+    Corner: {fileID: 919132149155446097, guid: 1d6d08c60ce968643af0d0e56ecd6467, type: 3}
+    Spawn: {fileID: 919132149155446097, guid: 8434a2bd4cfcb444787bbfcaba4f7de6, type: 3}
+    End: {fileID: 919132149155446097, guid: ae1fec2ab0b95934390e3758212dd5bd, type: 3}
+    Trees:
+    - {fileID: 919132149155446097, guid: 34cf380789488f244af47cd52d235b6a, type: 3}
+    - {fileID: 919132149155446097, guid: e3db8de44a656a94ea9175d6b4fa6a79, type: 3}
+    Rocks:
+    - {fileID: 919132149155446097, guid: e878c53879fbea549a036fb9e41973a6, type: 3}
+    - {fileID: 919132149155446097, guid: a84fa24b6c914b84cbd252be4f95622d, type: 3}
+    Crystals:
+    - {fileID: 919132149155446097, guid: 00f60f3f64b5a3f47a72cef9251b790a, type: 3}
+    - {fileID: 919132149155446097, guid: 33e5d07c1d8548c418ed93c905cf80ef, type: 3}
+    StraightOpen: 5
+    CornerOpen: 9
+    SpawnOpen: 4
+    EndOpen: 4
+  Snow:
+    Ground: {fileID: 919132149155446097, guid: f35ba9a3752b6804db1d28b7d7ddac1b, type: 3}
+    Straight: {fileID: 919132149155446097, guid: 80cce00bb5177df45adf19aebf515e3e, type: 3}
+    Corner: {fileID: 919132149155446097, guid: ac01dcad18e81184c92d0470fbb42799, type: 3}
+    Spawn: {fileID: 919132149155446097, guid: 8d003d7b62b36fd4abd9a26d0c7672d2, type: 3}
+    End: {fileID: 919132149155446097, guid: a0bd1dcd05c9cb144be76c10cb49f91c, type: 3}
+    Trees:
+    - {fileID: 919132149155446097, guid: 638a47a7b9e52a34a969f7521edcf6c7, type: 3}
+    - {fileID: 919132149155446097, guid: cc1ca76aa5ae115439f5ea63a0130f9c, type: 3}
+    Rocks:
+    - {fileID: 919132149155446097, guid: d43b8f60c888cf748bca7e35b8d20663, type: 3}
+    - {fileID: 919132149155446097, guid: c9e2f4237880aec42995a9d16b035441, type: 3}
+    Crystals:
+    - {fileID: 919132149155446097, guid: 6a4afd09fa48c7a4080709850d23c311, type: 3}
+    - {fileID: 919132149155446097, guid: 45097ab1e0da7a14f98fd0920dc0a948, type: 3}
+    StraightOpen: 5
+    CornerOpen: 9
+    SpawnOpen: 4
+    EndOpen: 4
+  Castle: {fileID: 919132149155446097, guid: 8cda75fad130f94429788b99b26f11b3, type: 3}
+  Towers:
+  - Bottom: {fileID: 919132149155446097, guid: 7889dc2489a6f9649a70af5316da42a1, type: 3}
+    Middle: {fileID: 919132149155446097, guid: 1f55fbd03d7a72a41a75045cccb17f8c, type: 3}
+    Top: {fileID: 919132149155446097, guid: 859e1c59ee8fe2b4bb057e46c461a8c2, type: 3}
+    Weapon: {fileID: 919132149155446097, guid: 62ba7d15bb829bc409369acbd82478f1, type: 3}
+  - Bottom: {fileID: 919132149155446097, guid: 72a39debfe71b7040a1ae9abe194a05c, type: 3}
+    Middle: {fileID: 919132149155446097, guid: 0f6d9546911e4294da51f5ae09097d21, type: 3}
+    Top: {fileID: 919132149155446097, guid: 1ae7cd4ff0b51c045a95da69d72d6aac, type: 3}
+    Weapon: {fileID: 919132149155446097, guid: eecf446b487667a4ba24d4a613d1bc17, type: 3}
+  - Bottom: {fileID: 919132149155446097, guid: 193ac3ca34518be489ef1d7846f5bbd7, type: 3}
+    Middle: {fileID: 919132149155446097, guid: 72d9ba47046090747b1b6271b8bac860, type: 3}
+    Top: {fileID: 919132149155446097, guid: 4e2f730cfdfe7364d8f87eba5f0179ff, type: 3}
+    Weapon: {fileID: 919132149155446097, guid: c3b1371dce620fe4b910bdf77b58adc6, type: 3}
+  - Bottom: {fileID: 919132149155446097, guid: 80e7b1a55c765244382bf2d68bae1a4a, type: 3}
+    Middle: {fileID: 919132149155446097, guid: 4a9f0629b4312a04c8d0ed2abeb5e3ae, type: 3}
+    Top: {fileID: 919132149155446097, guid: c9b8118c6d8fcee45aeef9987507f9bb, type: 3}
+    Weapon: {fileID: 919132149155446097, guid: ea8f81a0bf2d2144c8c77d5aabeebe3f, type: 3}
+  Saucers:
+  - {fileID: 919132149155446097, guid: ddeeb4c50f488ab4ab0037541b759c6d, type: 3}
+  - {fileID: 919132149155446097, guid: e196e53401097224490ae2596658e4f4, type: 3}
+  - {fileID: 919132149155446097, guid: 624767f6f36f11244bed5fa6310568c1, type: 3}
+  - {fileID: 919132149155446097, guid: 9a4f7d7305115aa4e87f04f634d36828, type: 3}
+  Overlay: {fileID: 2100000, guid: d526eeafe5ef3a542a5c09bafc66813b, type: 2}
+  ParticleAdditive: {fileID: 2100000, guid: 18e9379f212089e4a95e1d7b13ed8eda, type: 2}
+  ParticleAlpha: {fileID: 2100000, guid: 4d82a7ca066044e419916cd841ae7a40, type: 2}
+  Bolt: {fileID: 2100000, guid: d5d10963a4cdeb5499b80e29e9a96fb3, type: 2}
+  Shell: {fileID: 2100000, guid: 349a76a787032354292756185380ffb1, type: 2}
+  Boulder: {fileID: 2100000, guid: 66e23ec6c78a31844b3ed1cfc049574a, type: 2}
+  FrostOrb: {fileID: 2100000, guid: 1515f88e3c433974193c35a2cdb47cc9, type: 2}
+  BarBack: {fileID: 2100000, guid: c359e460f37da20479667d80ea87b44d, type: 2}
+  BarFill: {fileID: 2100000, guid: 9b87c4052053e0d44920366cbd1b7e9a, type: 2}
+  CubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  SphereMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  QuadMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  TitleMusic: {fileID: 8300000, guid: 70e2004b9011e6946941a3e1e8d49c2a, type: 3}
+  BattleMusic: {fileID: 8300000, guid: 38180f0728b5ebf4a9650b21f78d407d, type: 3}
+  Click: {fileID: 8300000, guid: 04a58859b5613e343b4de3bf31f92daa, type: 3}
+  Denied: {fileID: 8300000, guid: 5061dad660b661e4e8c74376d79a3d00, type: 3}
+  Build: {fileID: 8300000, guid: 274b83509813cf346bd8a5991ec950a7, type: 3}
+  Upgrade: {fileID: 8300000, guid: 255435eab05eed046ad6e74bb701d4b7, type: 3}
+  Sell: {fileID: 8300000, guid: c0be59e705e652c4fa3735435d8ae066, type: 3}
+  BallistaShot: {fileID: 8300000, guid: 1a150b1e25dedcd46ad6e286ef8ac131, type: 3}
+  CannonShot: {fileID: 8300000, guid: c532b1f1aab932b4e8011dc5435a5b9b, type: 3}
+  FrostShot: {fileID: 8300000, guid: ac25d0bf357c17544bef574220f3b46d, type: 3}
+  MortarShot: {fileID: 8300000, guid: 82920f8d3fc613e499fb8db0eade8fdc, type: 3}
+  Explosion: {fileID: 8300000, guid: 2c1e8fb67bad17a4da82a40337a70cb5, type: 3}
+  Hit: {fileID: 8300000, guid: c0d27ad4b17760c49a79dfb05c40cbca, type: 3}
+  SaucerDown: {fileID: 8300000, guid: c18de55c3d89de24889f570c7c7a3101, type: 3}
+  MothershipDown: {fileID: 8300000, guid: 982c01a84655ddf4bab0d30a28608cc0, type: 3}
+  Leak: {fileID: 8300000, guid: 69cc151a587f0194f94d0ce7c44c6e9d, type: 3}
+  WaveStart: {fileID: 8300000, guid: c915982ef5385c8418e0637e92868fdc, type: 3}
+  WaveClear: {fileID: 8300000, guid: ae37822a6b883764ebd1c1afc1280e33, type: 3}
+  Victory: {fileID: 8300000, guid: e52f39e9eab0755489157e6d163469eb, type: 3}
+  Defeat: {fileID: 8300000, guid: c4d7cd4d641b1f64cbe4db5b22208bff, type: 3}

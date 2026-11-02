@@ -1,0 +1,499 @@
+/*
+ * Saucer Siege HUD: warm cream panels with dark outlines over the bright Kenney diorama.
+ * Designed at 1280x720 reference pixels; the panel settings scale it to the screen.
+ */
+
+:root {
+    --ink: #1d2433;
+    --panel: rgba(255, 248, 232, 0.94);
+    --panel-edge: #1d2433;
+    --sky: #4aa3df;
+    --gold: #f2a516;
+    --red: #e84a3c;
+    --green: #4caf50;
+    --muted: #5d6677;
+
+    color: var(--ink);
+    font-size: 16px;
+}
+
+.hud,
+.layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.row--center {
+    justify-content: center;
+}
+
+/* ---- Buttons ---- */
+
+.button {
+    margin: 4px;
+    padding: 6px 14px;
+    border-width: 2px;
+    border-radius: 8px;
+    border-color: var(--panel-edge);
+    background-color: #ffffff;
+    color: var(--ink);
+    font-size: 15px;
+    -unity-font-style: bold;
+    transition-property: scale, background-color;
+    transition-duration: 0.08s;
+}
+
+.button:hover {
+    background-color: #ffe9b8;
+    scale: 1.04 1.04;
+}
+
+.button:active {
+    scale: 0.96 0.96;
+}
+
+.button:disabled {
+    opacity: 0.45;
+}
+
+.button--square {
+    width: 46px;
+    height: 40px;
+    padding: 0;
+    font-size: 17px;
+}
+
+.button--active {
+    background-color: var(--gold);
+}
+
+.button--wide {
+    width: 240px;
+}
+
+.button--big {
+    width: 260px;
+    height: 54px;
+    font-size: 22px;
+    background-color: var(--gold);
+}
+
+.button--danger {
+    background-color: #ffd6d0;
+}
+
+.button--call {
+    margin-top: 6px;
+    background-color: var(--gold);
+    font-size: 16px;
+}
+
+/* ---- Top bar ---- */
+
+.topbar {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    right: 12px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.chips {
+    flex-direction: row;
+}
+
+.chip {
+    margin-right: 8px;
+    padding: 6px 14px;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: var(--panel-edge);
+    background-color: var(--panel);
+    font-size: 19px;
+    -unity-font-style: bold;
+}
+
+.chip--lives {
+    color: var(--red);
+}
+
+.chip--money {
+    color: #b06f00;
+}
+
+/* ---- Panels ---- */
+
+.panel {
+    position: absolute;
+    padding: 10px 14px;
+    border-width: 2px;
+    border-radius: 12px;
+    border-color: var(--panel-edge);
+    background-color: var(--panel);
+}
+
+.panel__title {
+    font-size: 17px;
+    -unity-font-style: bold;
+    margin-bottom: 4px;
+}
+
+.note {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.wave-panel {
+    bottom: 10px;
+    left: 12px;
+    width: 262px;
+}
+
+.kinds {
+    flex-wrap: wrap;
+}
+
+.kind {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 2px;
+}
+
+.kind__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    border-width: 2px;
+    border-color: var(--panel-edge);
+    margin-right: 4px;
+}
+
+.kind__text {
+    font-size: 14px;
+}
+
+.tower-panel {
+    top: 62px;
+    right: 12px;
+    width: 268px;
+}
+
+.stats {
+    font-size: 14px;
+    margin-bottom: 6px;
+    white-space: normal;
+}
+
+/* ---- Build bar ---- */
+
+.buildbar {
+    position: absolute;
+    bottom: 10px;
+    left: 280px;
+    right: 0;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.card {
+    width: 172px;
+    height: 76px;
+    margin: 0 4px;
+    padding: 4px 6px 4px 36px;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: var(--panel);
+}
+
+.card Label {
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    -unity-text-align: middle-left;
+}
+
+.card__swatch {
+    position: absolute;
+    left: 8px;
+    top: 10px;
+    width: 18px;
+    height: 50px;
+    border-radius: 5px;
+    border-width: 2px;
+    border-color: var(--panel-edge);
+}
+
+.card__name {
+    font-size: 15px;
+    -unity-font-style: bold;
+}
+
+.card__role {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.card__cost {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: #b06f00;
+}
+
+.card--selected {
+    background-color: var(--gold);
+    border-color: #ffffff;
+    translate: 0 -6px;
+}
+
+.card--poor {
+    opacity: 0.5;
+}
+
+/* ---- Banner and hint ---- */
+
+.banner {
+    position: absolute;
+    top: 150px;
+    left: 0;
+    right: 0;
+    align-items: center;
+}
+
+.banner__title {
+    font-size: 40px;
+    -unity-font-style: bold;
+    color: #ffffff;
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: var(--ink);
+    opacity: 0;
+}
+
+.banner__sub {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: #ffffff;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: var(--ink);
+    opacity: 0;
+}
+
+.hint {
+    position: absolute;
+    bottom: 92px;
+    left: 0;
+    right: 0;
+    -unity-text-align: middle-center;
+    font-size: 14px;
+    color: #ffffff;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: var(--ink);
+}
+
+.floater {
+    position: absolute;
+    width: 60px;
+    -unity-text-align: middle-center;
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: var(--ink);
+}
+
+.floater--gold {
+    color: #ffd23f;
+}
+
+.floater--red {
+    color: #ff6b5b;
+}
+
+.floater--blue {
+    color: #9fe8ff;
+}
+
+/* ---- Menus ---- */
+
+.layer--center {
+    justify-content: center;
+    align-items: center;
+}
+
+.menu {
+    width: 540px;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-width: 3px;
+    border-radius: 18px;
+    border-color: var(--panel-edge);
+    background-color: var(--panel);
+}
+
+.menu--wide {
+    width: 900px;
+}
+
+.menu__logo {
+    font-size: 52px;
+    -unity-font-style: bold;
+    color: var(--sky);
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: var(--ink);
+    margin-bottom: 6px;
+}
+
+.menu__logo--defeat {
+    color: var(--red);
+}
+
+.menu__heading {
+    font-size: 30px;
+    -unity-font-style: bold;
+    margin-bottom: 14px;
+}
+
+.menu__tagline {
+    font-size: 17px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-bottom: 18px;
+}
+
+.menu__note {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 8px 0;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.footer {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    -unity-text-align: middle-center;
+    font-size: 13px;
+    color: #ffffff;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--ink);
+}
+
+.level {
+    width: 260px;
+    height: 270px;
+    margin: 8px;
+    padding: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #e8f6d8;
+}
+
+.level--snow {
+    background-color: #e4f1fb;
+}
+
+.level--highlight {
+    border-color: var(--gold);
+    border-width: 4px;
+}
+
+.level--locked {
+    opacity: 0.55;
+}
+
+.level__number {
+    font-size: 34px;
+    -unity-font-style: bold;
+    color: var(--sky);
+}
+
+.level__name {
+    font-size: 20px;
+    -unity-font-style: bold;
+}
+
+.level__tagline {
+    font-size: 14px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    height: 52px;
+    margin: 6px 0;
+}
+
+.level__meta {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.level__best {
+    font-size: 15px;
+    -unity-font-style: bold;
+    margin-top: 6px;
+}
+
+.stars {
+    margin: 10px 0;
+}
+
+.star {
+    width: 30px;
+    height: 30px;
+    margin: 0 10px;
+    rotate: 45deg;
+    border-radius: 5px;
+    border-width: 3px;
+    border-color: var(--panel-edge);
+    background-color: var(--gold);
+}
+
+.star--empty {
+    background-color: #d8d2c4;
+}
+
+.stars--small .star {
+    width: 18px;
+    height: 18px;
+    margin: 0 7px;
+    border-width: 2px;
+}
+
+.result__score {
+    font-size: 28px;
+    -unity-font-style: bold;
+}
+
+.result__best {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: var(--gold);
+    height: 26px;
+}
+
+.slider {
+    width: 300px;
+    margin: 4px 0;
+}
+
+.slider Label {
+    min-width: 70px;
+    color: var(--ink);
+    -unity-font-style: bold;
+}
