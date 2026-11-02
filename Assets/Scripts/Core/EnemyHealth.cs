@@ -21,12 +21,19 @@ namespace SaucerSiege.Core
         /// <summary>Fraction of health left, from 1 (untouched) to 0 (dead).</summary>
         public float Fraction => Math.Max(0, Current) / (float)Max;
 
-        /// <summary>Applies a hit. Returns true when the enemy is dead and must pay out and be removed.</summary>
+        /// <summary>
+        /// Applies a hit. Returns true only for the killing blow, so the bounty is paid and the
+        /// enemy removed once; hits on a dead enemy change nothing.
+        /// </summary>
         public bool Hit(int damage)
         {
             if (damage < 0) throw new ArgumentOutOfRangeException(nameof(damage));
-            Current -= damage;
-            return Current <= 0;
+            if (IsDead)
+            {
+                return false;
+            }
+            Current = Math.Max(0, Current - damage);
+            return Current == 0;
         }
     }
 }
