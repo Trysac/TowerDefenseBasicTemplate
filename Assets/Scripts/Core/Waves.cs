@@ -77,8 +77,8 @@ namespace SaucerSiege.Core
 
         public bool SpawningDone => Spawned >= Planned;
 
-        /// <summary>True once the wave is over: nothing of it is left on the field.</summary>
-        public bool IsCleared => Alive == 0;
+        /// <summary>True once the wave is over: everything has spawned and nothing of it is left.</summary>
+        public bool IsCleared => SpawningDone && Alive == 0;
 
         /// <summary>Moves the wave's clock and adds every enemy now due to <paramref name="spawns"/>.</summary>
         public void Advance(float deltaTime, List<WaveSpawn> spawns)
@@ -106,7 +106,10 @@ namespace SaucerSiege.Core
         /// <summary>One of this wave's enemies was killed or reached the base.</summary>
         public void Remove()
         {
-            Alive--;
+            if (Alive > 0)
+            {
+                Alive--;
+            }
         }
 
         void EnterGroup(int index, float previousEnd)

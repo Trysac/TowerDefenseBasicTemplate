@@ -64,5 +64,32 @@ namespace SaucerSiege.Core.Tests
             Assert.That(run.Alive, Is.EqualTo(0));
             Assert.That(run.IsCleared, Is.True);
         }
+
+        [Test]
+        public void TheWaveIsNotClearedWhileGroupsAreStillToCome()
+        {
+            // Killing the first group before the second one arrived used to end the wave
+            // (and the last wave counted as a win) while enemies were still due.
+            var run = new WaveRun(new[] { new WaveGroup(0, 1, 0f, 0.5f), new WaveGroup(1, 1, 3f, 0.5f) });
+            Step(run, 0.1f);
+            run.Remove();
+            Assert.That(run.Alive, Is.EqualTo(0));
+            Assert.That(run.SpawningDone, Is.False);
+            Assert.That(run.IsCleared, Is.False);
+            Step(run, 3.4f);
+            run.Remove();
+            Assert.That(run.IsCleared, Is.True);
+        }
+
+        [Test]
+        public void RemovingMoreEnemiesThanAliveNeverGoesBelowZero()
+        {
+            var run = new WaveRun(new[] { new WaveGroup(0, 1, 0f, 0.5f) });
+            Step(run, 0.1f);
+            run.Remove();
+            run.Remove();
+            Assert.That(run.Alive, Is.EqualTo(0));
+            Assert.That(run.IsCleared, Is.True);
+        }
     }
 }
