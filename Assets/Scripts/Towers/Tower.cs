@@ -1,29 +1,18 @@
 using System.Collections.Generic;
+using SaucerSiege.Core;
 using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
-    #region // Public Variables
-
-    public enum TowerTargetPriority
-    {
-        First,
-        Close,
-        Strong
-    }
-
-    #endregion
-
-    // ------------------------------------------------
-
     #region // Private Variables
 
     [Header("General Parameters")]
     [SerializeField] float towerRange;
-    [SerializeField] TowerTargetPriority targetPriority;
+    [SerializeField] TargetPriority targetPriority;
     [SerializeField] bool isRotateTowardsTargetEnable;
 
     private List<Enemy> currentEnemiesInRange = new List<Enemy>();
+    private readonly List<TargetCandidate> candidates = new List<TargetCandidate>();
     private Enemy currentEnemy;
 
     [Header("Attacking")]
@@ -59,53 +48,17 @@ public class Tower : MonoBehaviour
     Enemy GetEnemy() // returns the current enemy for the tower to attack
     {
         CurrentEnemiesInRange.RemoveAll(x => x == null);
-
-        if (CurrentEnemiesInRange.Count == 0) { return null; }
-
-        if (CurrentEnemiesInRange.Count == 1) { return CurrentEnemiesInRange[0]; }
-
-        switch (TargetPriority)
+        candidates.Clear();
+        foreach (Enemy enemy in CurrentEnemiesInRange)
         {
-            case TowerTargetPriority.First:
-                {
-                    return CurrentEnemiesInRange[0];
-                }
-            case TowerTargetPriority.Close:
-                {
-                    Enemy closest = null;
-                    float dist = 99;
-
-                    for (int x = 0; x < CurrentEnemiesInRange.Count; x++)
-                    {
-                        float d = (transform.position - CurrentEnemiesInRange[x].transform.position).sqrMagnitude;
-
-                        if (d < dist)
-                        {
-                            closest = CurrentEnemiesInRange[x];
-                            dist = d;
-                        }
-                    }
-
-                    return closest;
-                }
-            case TowerTargetPriority.Strong:
-                {
-                    Enemy strongest = null;
-                    int strongestHealth = 0;
-
-                    foreach (Enemy enemy in CurrentEnemiesInRange)
-                    {
-                        if (enemy.Health > strongestHealth)
-                        {
-                            strongest = enemy;
-                            strongestHealth = enemy.Health;
-                        }
-                    }
-
-                    return strongest;
-                }
+            Vector3 p = enemy.transform.position;
+            candidates.Add(new TargetCandidate(new Vec2(p.x, p.z), enemy.PathProgress, enemy.Health));
         }
-        return null;
+
+        // The trigger collider already limits the list to enemies in range.
+        Vector3 origin = transform.position;
+        int index = Targeting.Pick(candidates, new Vec2(origin.x, origin.z), float.PositiveInfinity, TargetPriority);
+        return index >= 0 ? CurrentEnemiesInRange[index] : null;
     }
 
     #endregion
@@ -149,7 +102,7 @@ public class Tower : MonoBehaviour
     #region // Variables Properties
 
     public float TowerRange { get => towerRange; set => towerRange = value; }
-    public TowerTargetPriority TargetPriority { get => targetPriority; set => targetPriority = value; }
+    public TargetPriority TargetPriority { get => targetPriority; set => targetPriority = value; }
     public bool IsRotateTowardsTargetEnable { get => isRotateTowardsTargetEnable; set => isRotateTowardsTargetEnable = value; }
     public List<Enemy> CurrentEnemiesInRange { get => currentEnemiesInRange; set => currentEnemiesInRange = value; }
     public Enemy CurrentEnemy { get => currentEnemy; set => currentEnemy = value; }

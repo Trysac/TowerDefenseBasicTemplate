@@ -23,7 +23,7 @@ public class EnemyHealthBar : MonoBehaviour
     {
         if (enemy != null)
         {
-            Fill.fillAmount = (float)enemy.Health / (float)startHealth;
+            Fill.fillAmount = Mathf.Clamp01((float)enemy.Health / startHealth);
             Fill.color = ColorGradient.Evaluate(Fill.fillAmount);
 
             transform.position = cam.WorldToScreenPoint(enemy.transform.position) + new Vector3(0, Screen.height / 30.0f);
@@ -37,7 +37,7 @@ public class EnemyHealthBar : MonoBehaviour
     public void Initialize(Enemy enemy)
     {
         this.enemy = enemy;
-        startHealth = enemy.Health;
+        startHealth = enemy.MaxHealth;
         cam = Camera.main;
     }
 

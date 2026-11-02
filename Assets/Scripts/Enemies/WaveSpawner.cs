@@ -1,4 +1,5 @@
-using System.Collections;
+using System.Collections.Generic;
+using SaucerSiege.Core;
 using UnityEngine;
 using TMPro;
 
@@ -8,13 +9,16 @@ public class WaveSpawner : MonoBehaviour
 
     [Header("Waves Configuration Parameters")] 
     [SerializeField] int currentWave = 0;
-    [SerializeField] [Tooltip("Serialized just for debugind purpose")] int remainingEnemies;
     [SerializeField] WaveData[] waves;
 
     [Header("Components")]
     [SerializeField] Transform enemySpawnPos;
     [SerializeField] TextMeshProUGUI waveText;
     [SerializeField] GameObject nextWaveButton;
+
+    private WaveRun run;
+    private WaveData runData;
+    private readonly List<WaveSpawn> spawns = new List<WaveSpawn>();
 
     #endregion
 
@@ -24,44 +28,42 @@ public class WaveSpawner : MonoBehaviour
 
     public void SpawnNextWave()
     {
-        CurrentWave++;
-
-        if (CurrentWave - 1 == Waves.Length)
+        if (CurrentWave >= Waves.Length)
             return;
 
+        CurrentWave++;
         WaveText.text = $"Wave: {CurrentWave}";
-
-        StartCoroutine(SpawnWave());
-    }
-
-    public IEnumerator SpawnWave()
-    {
         NextWaveButton.SetActive(false);
-        WaveData wave = Waves[CurrentWave - 1];
 
-        for (int x = 0; x < wave.EnemySets.Length; x++)
+        runData = Waves[CurrentWave - 1];
+        var groups = new WaveGroup[runData.EnemySets.Length];
+        for (int x = 0; x < groups.Length; x++)
         {
-            yield return new WaitForSeconds(wave.EnemySets[x].spawnDelay);
-
-            for (int y = 0; y < wave.EnemySets[x].spawnCount; y++)
-            {
-                SpawnEnemy(wave.EnemySets[x].enemyPrefab);
-                yield return new WaitForSeconds(wave.EnemySets[x].spawnRate);
-            }
+            WaveData.EnemySet set = runData.EnemySets[x];
+            groups[x] = new WaveGroup(x, set.spawnCount, set.spawnDelay, set.spawnRate);
         }
+        run = new WaveRun(groups);
     }
 
-    public void SpawnEnemy(GameObject enemyPrefab)
+    public void Update()
     {
-        Instantiate(enemyPrefab, EnemySpawnPos.position, Quaternion.identity);
-        RemainingEnemies++;
+        if (run == null)
+            return;
+
+        spawns.Clear();
+        run.Advance(Time.deltaTime, spawns);
+        foreach (WaveSpawn spawn in spawns)
+            Instantiate(runData.EnemySets[spawn.Group].enemyPrefab, EnemySpawnPos.position, Quaternion.identity);
     }
 
     public void OnEnemyDestroyed()
     {
-        RemainingEnemies--;
+        if (run == null)
+            return;
 
-        if (RemainingEnemies == 0)
+        run.Remove();
+
+        if (run.IsCleared && CurrentWave < Waves.Length)
             NextWaveButton.SetActive(true);
     }
 
@@ -83,7 +85,9 @@ public class WaveSpawner : MonoBehaviour
 
     public WaveData[] Waves { get => waves; set => waves = value; }
     public int CurrentWave { get => currentWave; set => currentWave = value; }
-    public int RemainingEnemies { get => remainingEnemies; set => remainingEnemies = value; }
+    public int RemainingEnemies => run != null ? run.Alive : 0;
+    /// <summary>True once the last wave has been played out.</summary>
+    public bool IsLastWaveCleared => run != null && run.IsCleared && CurrentWave == Waves.Length;
     public Transform EnemySpawnPos { get => enemySpawnPos; set => enemySpawnPos = value; }
     public TextMeshProUGUI WaveText { get => waveText; set => waveText = value; }
     public GameObject NextWaveButton { get => nextWaveButton; set => nextWaveButton = value; }

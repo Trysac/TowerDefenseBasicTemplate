@@ -1,3 +1,4 @@
+using SaucerSiege.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,6 +18,7 @@ public class Enemy : MonoBehaviour
     [Header("Enemy Path")]
     private Transform[] path;
     private int curPathWaypoint;
+    private EnemyHealth healthModel;
 
     #endregion
 
@@ -35,6 +37,7 @@ public class Enemy : MonoBehaviour
     public void Start()
     {
         path = GameManager.instance.EnemyPath.Waypoints;
+        healthModel = new EnemyHealth(health);
         CreateHealthBar();
     }
 
@@ -45,9 +48,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int amount) //// called when a tower deals damage to the enemy
     {
-        Health -= amount;
-
-        if (Health <= 0)
+        if (healthModel.Hit(amount))
         {
             GameManager.instance.AddMoney(MoneyOnDeath);
             OnDestroyed.Invoke();
@@ -72,7 +73,9 @@ public class Enemy : MonoBehaviour
     {
         if (curPathWaypoint < path.Length)
         {
+            Vector3 before = transform.position;
             transform.position = Vector3.MoveTowards(transform.position, path[curPathWaypoint].position, MoveSpeed * Time.deltaTime);
+            PathProgress += Vector3.Distance(before, transform.position);
 
             if (transform.position == path[curPathWaypoint].position)
                 curPathWaypoint++;
@@ -91,7 +94,11 @@ public class Enemy : MonoBehaviour
 
     #region // Variable Properties
 
-    public int Health { get => health; set => health = value; }
+    /// <summary>Health left; before Start it is the starting health set on the prefab.</summary>
+    public int Health => healthModel != null ? healthModel.Current : health;
+    public int MaxHealth => health;
+    /// <summary>Distance travelled along the path, used by the towers' target priority.</summary>
+    public float PathProgress { get; private set; }
     public int DamageToPlayer { get => damageToPlayer; set => damageToPlayer = value; }
     public int MoneyOnDeath { get => moneyOnDeath; set => moneyOnDeath = value; }
     public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }

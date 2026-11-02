@@ -77,12 +77,16 @@ public class TowerPlacement : MonoBehaviour
 
     private void PlaceTower()
     {
+        if (!GameManager.instance.TrySpendMoney(TowerToPlaceDown.TowerCost))
+        {
+            CancelPlacement();
+            return;
+        }
+
         Vector3 pos = CursorSelectedTile.transform.position + new Vector3(0, TowerPlaceYOffset, 0);
         GameObject tower = Instantiate(TowerToPlaceDown.TowerPrefab, pos, Quaternion.identity);
 
         CursorSelectedTile.Tower = tower.GetComponent<Tower>();
-
-        GameManager.instance.TakeMoney(TowerToPlaceDown.TowerCost);
 
         CancelPlacement();
     }

@@ -1,3 +1,4 @@
+using SaucerSiege.Core;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int playerMoney;
 
     private bool isGameActive;
+    private Economy economy;
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI healthAndMoneyText;
@@ -39,6 +41,7 @@ public class GameManager : MonoBehaviour
     public void Awake()
     {
         instance = this;
+        economy = new Economy(playerMoney, playerHealth);
     }
 
     public void Start()
@@ -54,26 +57,29 @@ public class GameManager : MonoBehaviour
 
     public void AddMoney(int amount)
     {
-        PlayerMoney += amount;
+        economy.Earn(amount);
         UpdateHealthAndMoneyText();
 
         OnMoneyChanged.Invoke();
     }
 
-    public void TakeMoney(int amount)
+    public bool TrySpendMoney(int amount)
     {
-        PlayerMoney -= amount;
+        if (!economy.TrySpend(amount))
+            return false;
+
         UpdateHealthAndMoneyText();
 
         OnMoneyChanged.Invoke();
+        return true;
     }
 
     public void TakeDamage(int amount)
     {
-        PlayerHealth -= amount;
+        bool baseFell = economy.Leak(amount);
         UpdateHealthAndMoneyText();
 
-        if (PlayerHealth <= 0)
+        if (baseFell)
             GameOver();
     }
 
@@ -97,7 +103,7 @@ public class GameManager : MonoBehaviour
     {
         if (!IsGameActive) { return;}
             
-        if (WaveSpawner.RemainingEnemies == 0 && WaveSpawner.CurrentWave == WaveSpawner.Waves.Length)
+        if (WaveSpawner.IsLastWaveCleared)
         {
             WinGame();
         }
@@ -123,8 +129,8 @@ public class GameManager : MonoBehaviour
 
     #region // Variables Properties
 
-    public int PlayerHealth { get => playerHealth; set => playerHealth = value; }
-    public int PlayerMoney { get => playerMoney; set => playerMoney = value; }
+    public int PlayerHealth => economy.Lives;
+    public int PlayerMoney => economy.Money;
     public bool IsGameActive { get => isGameActive; set => isGameActive = value; }
     public TextMeshProUGUI HealthAndMoneyText { get => healthAndMoneyText; set => healthAndMoneyText = value; }
     public EnemyPath EnemyPath { get => enemyPath; set => enemyPath = value; }
