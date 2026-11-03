@@ -11,6 +11,16 @@ winding road to stop waves of flying saucers, across three battlefields that end
 | ![Placing a Frost tower: the tile and its range turn green where it fits](docs/screenshots/build.png) | ![The mothership on Frostbite Ridge](docs/screenshots/snow.png) |
 | ![Result screen after a flawless defence](docs/screenshots/victory.png) | |
 
+## Play it
+
+- **In your browser:** [trysac.github.io/TowerDefenseBasicTemplate](https://trysac.github.io/TowerDefenseBasicTemplate/)
+- **On itch.io:** [trysac.itch.io/saucer-siege](https://trysac.itch.io/saucer-siege)
+- **Get the code:** fork this repository, or clone it:
+
+  ```bash
+  git clone https://github.com/Trysac/TowerDefenseBasicTemplate.git
+  ```
+
 ## Run it
 
 1. Install **Unity 6000.3.27f1 (Unity 6 LTS)** with Unity Hub (add the Windows or Web build
