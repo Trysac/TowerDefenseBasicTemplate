@@ -13,6 +13,8 @@ namespace SaucerSiege.Game
     /// Without the -screenshot argument nothing is created, so normal runs and WebGL builds are
     /// unaffected. The same hook runs inside the editor (ProjectBuilder.CaptureScreenshots), which
     /// renders the camera and the HUD off screen and blends them, for machines that cannot run the player.
+    /// Adding <c>-frames N [-fps F]</c> records N numbered frames per scenario at a fixed timestep
+    /// (into &lt;folder&gt;/&lt;scenario&gt;/) instead of one still, e.g. <c>-scenario gameplay -frames 90 -fps 15</c>.
     /// </summary>
     public sealed class ScreenshotScenarios : MonoBehaviour
     {
@@ -22,6 +24,8 @@ namespace SaucerSiege.Game
 
         string folder;
         string[] scenarios;
+        int frames;
+        int fps;
         RenderTexture sceneTarget;
         RenderTexture uiTarget;
 
@@ -36,6 +40,8 @@ namespace SaucerSiege.Game
             var host = new GameObject(nameof(ScreenshotScenarios)).AddComponent<ScreenshotScenarios>();
             host.folder = target;
             host.scenarios = (Argument("-scenario") ?? DefaultScenarios).Split(',');
+            host.frames = int.TryParse(Argument("-frames"), out int count) ? count : 0;
+            host.fps = int.TryParse(Argument("-fps"), out int rate) ? rate : 15;
         }
 
         IEnumerator Start()
@@ -52,6 +58,11 @@ namespace SaucerSiege.Game
             {
                 string scenario = raw.Trim();
                 UnityEngine.Random.InitState(scenario.Length * 97);
+                if (frames > 0)
+                {
+                    yield return Record(director, scenario);
+                    continue;
+                }
                 yield return Stage(director, scenario);
                 Texture2D shot;
                 if (Application.isEditor)
@@ -73,6 +84,71 @@ namespace SaucerSiege.Game
 #else
             Application.Quit();
 #endif
+        }
+
+        /// <summary>
+        /// Stages <paramref name="scenario"/>, then saves <see cref="frames"/> frames while game time
+        /// advances exactly 1/<see cref="fps"/> s per frame, however long each capture takes.
+        /// </summary>
+        IEnumerator Record(GameDirector director, string scenario)
+        {
+            string target = Path.Combine(folder, scenario);
+            Directory.CreateDirectory(target);
+            yield return Stage(director, scenario);
+            if (scenario == "gameplay")
+            {
+                StartCoroutine(BuildDuringBattle(director));
+            }
+            Time.captureFramerate = fps;
+            for (int i = 0; i < frames; i++)
+            {
+                Texture2D shot;
+                if (Application.isEditor)
+                {
+                    yield return null;
+                    shot = CaptureOffscreen();
+                }
+                else
+                {
+                    yield return new WaitForEndOfFrame();
+                    shot = ScreenCapture.CaptureScreenshotAsTexture();
+                }
+                File.WriteAllBytes(Path.Combine(target, $"frame_{i:0000}.png"), shot.EncodeToPNG());
+                Destroy(shot);
+            }
+            Time.captureFramerate = 0;
+            Debug.Log($"Saved {frames} frames of {scenario} at {fps} fps.");
+        }
+
+        /// <summary>While the waves roll in, the player places a mortar on free grass and upgrades a cannon.</summary>
+        static IEnumerator BuildDuringBattle(GameDirector director)
+        {
+            Battle battle = director.Session.Battle;
+            Cell spot = new Cell(9, 5);
+            for (int col = 3; col < battle.Map.Cols && !battle.CanBuild(TowerKind.Mortar, spot); col++)
+            {
+                for (int row = 1; row < battle.Map.Rows; row++)
+                {
+                    spot = new Cell(col, row);
+                    if (battle.CanBuild(TowerKind.Mortar, spot))
+                    {
+                        break;
+                    }
+                }
+            }
+            yield return new WaitForSeconds(0.8f);
+            director.ToggleBuild(TowerKind.Mortar);
+            director.SetCursor(spot);
+            yield return new WaitForSeconds(1.2f);
+            director.ActAt(spot);
+            yield return new WaitForSeconds(1.4f);
+            TowerAgent cannon = battle.TowerAt(new Cell(5, 5));
+            if (cannon != null)
+            {
+                director.ActAt(cannon.Cell);
+                yield return new WaitForSeconds(0.8f);
+                battle.Upgrade(cannon);
+            }
         }
 
         static MemoryRecordStore Records(int cleared)
@@ -144,6 +220,23 @@ namespace SaucerSiege.Game
                         director.SetCursor(new Cell(5, 5));
                         yield return new WaitForSecondsRealtime(0.3f);
                     }
+                    break;
+                }
+                case "gameplay":
+                {
+                    director.UseMemoryStore(Records(1));
+                    director.TryStartLevel(1);
+                    yield return null;
+                    Battle battle = director.Session.Battle;
+                    battle.Economy.Earn(1100);
+                    Build(battle, TowerKind.Frost, 4, 4, 0);
+                    Build(battle, TowerKind.Cannon, 5, 5, 1);
+                    Build(battle, TowerKind.Cannon, 12, 4, 2);
+                    Build(battle, TowerKind.Ballista, 8, 2, 1);
+                    Build(battle, TowerKind.Frost, 10, 6, 0);
+                    Build(battle, TowerKind.Ballista, 6, 2, 0);
+                    for (int i = 0; i < 4; i++) director.CallWave();
+                    yield return new WaitForSecondsRealtime(4f);
                     break;
                 }
                 case "snow":
