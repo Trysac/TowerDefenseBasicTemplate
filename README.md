@@ -3,6 +3,8 @@
 A small 3D tower defense built with Unity: build, upgrade and sell four kinds of towers beside a
 winding road to stop waves of flying saucers, across three battlefields that end with a mothership.
 
+![Gameplay](docs/media/gameplay.gif)
+
 ![A Cannon tower selected mid-battle on Crystal Pass, with its range and upgrade preview](docs/screenshots/upgrade.png)
 
 | | |
